@@ -1,0 +1,30 @@
+C:\Users\Gabriela\Desktop\Directorio\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+C:\Users\Gabriela\Desktop\Directorio\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+C:\Users\Gabriela\Desktop\Directorio\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+C:\Users\Gabriela\Desktop\Directorio\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+C:\Users\Gabriela\Desktop\Directorio\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache
+C:\Users\Gabriela\Desktop\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+C:\Users\Gabriela\Desktop\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+C:\Users\Gabriela\Desktop\Diccionario\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+C:\Users\Gabriela\Desktop\Diccionario\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+C:\Users\Gabriela\Desktop\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache
+C:\Users\Ale\Desktop\semestre 2014-2015\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+C:\Users\Ale\Desktop\semestre 2014-2015\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+C:\Users\Ale\Desktop\semestre 2014-2015\Diccionario\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+C:\Users\Ale\Desktop\semestre 2014-2015\Diccionario\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+C:\Users\Ale\Desktop\semestre 2014-2015\Diccionario\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache
+C:\Users\Ale\Desktop\semestre 2014-2015\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+C:\Users\Ale\Desktop\semestre 2014-2015\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+C:\Users\Ale\Desktop\semestre 2014-2015\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache
+C:\Users\Ale\Desktop\semestre 2014-2015\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+C:\Users\Ale\Desktop\semestre 2014-2015\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+F:\TODO\Archivos Miguel\BUENOS PROYECTOS\Proyecto de Archivos\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+F:\TODO\Archivos Miguel\BUENOS PROYECTOS\Proyecto de Archivos\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+F:\TODO\Archivos Miguel\BUENOS PROYECTOS\Proyecto de Archivos\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+F:\TODO\Archivos Miguel\BUENOS PROYECTOS\Proyecto de Archivos\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+F:\TODO\Archivos Miguel\BUENOS PROYECTOS\Proyecto de Archivos\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache
+C:\Users\epsilon\Desktop\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.exe
+C:\Users\epsilon\Desktop\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.pdb
+C:\Users\epsilon\Desktop\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.exe
+C:\Users\epsilon\Desktop\indexada\Diccionario\Diccionario\bin\Debug\Diccionario.pdb
+C:\Users\epsilon\Desktop\indexada\Diccionario\Diccionario\obj\x86\Debug\Diccionario.csprojResolveAssemblyReference.cache

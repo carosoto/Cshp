@@ -1,0 +1,11 @@
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\bin\Debug\EditorGrafovsV3.0.exe.config
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\bin\Debug\EditorGrafovsV3.0.exe
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\bin\Debug\EditorGrafovsV3.0.pdb
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\bin\Debug\DevComponents.DotNetBar2.xml
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3.0.csprojResolveAssemblyReference.cache
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3._0.Form1.resources
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3._0.Properties.Resources.resources
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3.0.csproj.GenerateResource.Cache
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3.0.exe
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3.0.pdb
+C:\Users\epsilon\OneDrive\UASLP\GRAFOS\EditorGrafovsV3.0\EditorGrafovsV3.0\obj\Debug\EditorGrafovsV3._0.Configuracion.resources
