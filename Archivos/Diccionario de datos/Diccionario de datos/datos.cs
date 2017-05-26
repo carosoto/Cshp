@@ -221,9 +221,23 @@ namespace Diccionario_de_datos
                 Boolean numMay = false;
                 int posNodo = 0;
 
-                for (int i = 0; i < arbol[pos].GS_nodos.Count; i++)
+                int may = valor;
+                int men = valor;
+                int i = 0;
+                for (; i < arbol[pos].GS_nodos.Count; i++)
                 {
-                    if (valor > arbol[pos].GS_nodos[i].GS_valor)
+                    if (arbol[pos].GS_nodos[i].GS_valor > may)
+                    {
+                        may = -1;
+                        break;
+                    }
+                  /*  if(arbol[pos].GS_nodos[i].GS_valor < men)
+                    {
+                        men = -1;
+                    }*/
+
+
+                    /*if (valor > arbol[pos].GS_nodos[i].GS_valor)
                     {
                         MessageBox.Show("el valor es mayor");
                         numMay = true;
@@ -236,8 +250,9 @@ namespace Diccionario_de_datos
                         numMay = false;
                         posNodo = i;
                         break;
-                    }
+                    }*/
                 }
+                if(may == valor) { numMay = true; }
 
                 // MessageBox.Show("valor del nodo = " + arbol[pos].GS_nodos[posNodo].GS_valor + " direccion del arbol " + arbol[pos].GS_direccion + " tipo de arbol " + arbol[pos].GS_tipo );
                 // si el valor es mayor
@@ -260,25 +275,23 @@ namespace Diccionario_de_datos
                 if (arbol[buscaHoja(direccion_hoja)].GS_datosPositivos() <= 3)
                 {
                     arbol[buscaHoja(direccion_hoja)].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
-                    arbol[buscaHoja(direccion_hoja)].ordena(dataGridView1,filas,PosColumna());
+                    arbol[buscaHoja(direccion_hoja)].ordena(dataGridView1, filas, PosColumna());
                 }
                 else
                 {
-                    
+
                     MessageBox.Show("crea nueva hoja");
                     int PosC = PosColumna();
                     int valorDesbordado = arbol[buscaHoja(direccion_hoja)].ordenaValores(dataGridView1, filas, PosC, Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosC].Value));
                     Arbol hojaSig = new Arbol();
-                    
+
 
                     hojaSig.AsignaMemoria(arch); // siguiente hoja
-                                             
+
                     hojaSig.AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente);
                     hojaSig.AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_dirSiguiente);
-                    arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor=-1;
-                    arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente =-1;
-                    arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor = -1;
-                    arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_dirSiguiente = -1;
+                    //
+
                     int index = 0;
                     for (; index < filas; index++)
                     {
@@ -291,10 +304,22 @@ namespace Diccionario_de_datos
                     arbol.Add(hojaSig);
 
                     int raizPos = buscaRaiz();
+                    int posVaciaRaiz = arbol[raizPos].posRiazVacia();
                     Arbol auxA = new Arbol();
                     auxA = arbol[raizPos];
-                    arbol[raizPos].AgregaValorNodo(valorDesbordado, Convert.ToInt64(dataGridView1.Rows[index].Cells[0].Value));
-                    arbol[raizPos].ordenaRaiz(auxA);
+                  //  arbol[raizPos].AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_direccion);
+                    arbol[raizPos].AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_direccion,posVaciaRaiz);
+                    arbol[raizPos].ordenaRaiz(auxA,arbol);
+                    if (posVaciaRaiz != -1)
+                    {
+                        arbol[raizPos].GS_nodos[posVaciaRaiz + 1].GS_dirSiguiente = hojaSig.GS_direccion;
+
+                    }
+
+                    arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor = -1;
+                    arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente = -1;
+                    arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor = -1;
+                    arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_dirSiguiente = -1;
 
 
                 }

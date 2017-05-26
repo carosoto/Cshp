@@ -73,8 +73,17 @@ namespace Diccionario_de_datos
             get { return cont; }
         }
 
+        public int posRiazVacia()
+        {
+            int j = 0;
+            for(;j< GS_nodos.Count; j++)
+            {
+                if (GS_nodos[j].GS_valor == -1) { return j; }
+            }
+            return -1;
+        }
         
-        public void ordenaRaiz( Arbol a)
+        public void ordenaRaiz( Arbol a , List<Arbol> la)
         {
             List<int> n = new List<int>();
             Arbol aux = new Arbol();
@@ -84,23 +93,30 @@ namespace Diccionario_de_datos
                 if (nax.GS_valor != -1) n.Add(nax.GS_valor);
             }
             n.Sort();
-            this.reiniciaNodo();a
+            this.reiniciaNodo();
+            
+
             for(int i = 0; i < n.Count; i++)
             {
                 GS_nodos[i].GS_valor = n[i];
             }
-            
-            for(int i = 0; i < aux.GS_nodos.Count; i++)
+
+            int ix = 0, iy = 0 ;
+            Boolean sal = false;
+            for(;ix < la.Count; ix++)
             {
-                for(int j = 0; j < GS_nodos.Count; j++)j
+                for(;iy < la[ix].GS_nodos.Count; iy++)
                 {
-                    if(GS_nodos[j].GS_valor == aux.GS_nodos[i].GS_valor)
+                    if(GS_nodos[iy].GS_valor > la[ix].GS_nodos[iy].GS_valor && la[ix].GS_nodos[iy].GS_valor != -1)
                     {
-                        GS_nodos[j].GS_dirSiguiente = aux.GS_nodos[i].GS_dirSiguiente;
+                        GS_nodos[iy].GS_dirSiguiente = la[ix].GS_direccion;
+                        sal = true;
+                        break;
                     }
 
                 }
 
+                if (sal) break;
 
             }
 
@@ -153,6 +169,13 @@ namespace Diccionario_de_datos
                 nodo[0].GS_dirSiguiente = -1;
                 nodo[0].GS_valor = -1;
             }
+        }
+
+        public void AgregaValorNodo(int value,long dir , int pos)
+        {
+            nodo[pos].GS_dirSiguiente = dir;
+            nodo[pos].GS_valor = value;
+
         }
 
        public void AgregaValorNodo(int value,long dir)
