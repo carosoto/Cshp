@@ -73,6 +73,49 @@ namespace Diccionario_de_datos
             get { return cont; }
         }
 
+        
+        public void ordenaRaiz( Arbol a)
+        {
+            List<int> n = new List<int>();
+            Arbol aux = new Arbol();
+            aux = a;
+            foreach(Nodo nax in GS_nodos)
+            {
+                if (nax.GS_valor != -1) n.Add(nax.GS_valor);
+            }
+            n.Sort();
+            this.reiniciaNodo();a
+            for(int i = 0; i < n.Count; i++)
+            {
+                GS_nodos[i].GS_valor = n[i];
+            }
+            
+            for(int i = 0; i < aux.GS_nodos.Count; i++)
+            {
+                for(int j = 0; j < GS_nodos.Count; j++)j
+                {
+                    if(GS_nodos[j].GS_valor == aux.GS_nodos[i].GS_valor)
+                    {
+                        GS_nodos[j].GS_dirSiguiente = aux.GS_nodos[i].GS_dirSiguiente;
+                    }
+
+                }
+
+
+            }
+
+
+
+            //acomodar direcciones
+
+
+           
+
+            
+
+
+        }
+
         public int ordenaValores(DataGridView tabla, int filas,int pos, int valorDesbordado)
         {
             List<int> valores = new List<int>();
@@ -101,8 +144,6 @@ namespace Diccionario_de_datos
             return valores[4];
             
         }
-
-
 
        public void reiniciaNodo()
         {
@@ -138,6 +179,53 @@ namespace Diccionario_de_datos
             }
             nodo.Clear();
             nodo = aux;
+
+        }
+
+        public void ordena(DataGridView tabla,int filas , int pos)
+        {
+            List<int> aux = new List<int>();
+           
+            foreach(Nodo n in GS_nodos)
+            {
+                if (n.GS_valor != -1) aux.Add(n.GS_valor);
+            }
+            aux.Sort();
+            
+            nodo.Clear();
+            for (int j = 0; j < aux.Count; j++)
+            {
+                for (int i = 0; i < filas; i++)
+                {
+                    if (Convert.ToInt32(tabla.Rows[i].Cells[pos].Value) == aux[j])
+                    {
+                        Nodo n = new Nodo();
+                        n.GS_valor = aux[j];
+                        n.GS_dirSiguiente = Convert.ToInt64(tabla.Rows[i].Cells[0].Value);
+                        nodo.Add(n);
+
+                    }
+                }
+
+            }
+            if (GS_datosPositivos() <= 3){
+                Nodo n = new Nodo();
+                nodo.Add(n);
+            }
+
+
+
+        }
+
+        public int GS_datosPositivos()
+        {
+            int contador = 0;
+
+            foreach (Nodo n in GS_nodos) {
+                if (n.GS_valor != -1) contador++;
+
+            }
+            return contador;
 
         }
 
