@@ -177,7 +177,8 @@
             "1",
             "2",
             "3",
-            "4"});
+            "4",
+            "5"});
             this.Clave.Location = new System.Drawing.Point(299, 38);
             this.Clave.Margin = new System.Windows.Forms.Padding(2);
             this.Clave.Name = "Clave";

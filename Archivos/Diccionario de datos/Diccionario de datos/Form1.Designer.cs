@@ -50,8 +50,8 @@
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.atributosToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.styleManager1 = new DevComponents.DotNetBar.StyleManager(this.components);
             this.datosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.styleManager1 = new DevComponents.DotNetBar.StyleManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -234,7 +234,7 @@
             this.abrirToolStripMenuItem,
             this.abrirToolStripMenuItem1});
             this.atributosToolStripMenuItem.Name = "atributosToolStripMenuItem";
-            this.atributosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.atributosToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.atributosToolStripMenuItem.Text = "Archivo";
             // 
             // abrirToolStripMenuItem
@@ -254,21 +254,21 @@
             // atributosToolStripMenuItem1
             // 
             this.atributosToolStripMenuItem1.Name = "atributosToolStripMenuItem1";
-            this.atributosToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.atributosToolStripMenuItem1.Size = new System.Drawing.Size(123, 22);
             this.atributosToolStripMenuItem1.Text = "Atributos";
             this.atributosToolStripMenuItem1.Click += new System.EventHandler(this.atributosToolStripMenuItem1_Click);
+            // 
+            // datosToolStripMenuItem
+            // 
+            this.datosToolStripMenuItem.Name = "datosToolStripMenuItem";
+            this.datosToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.datosToolStripMenuItem.Text = "Datos";
+            this.datosToolStripMenuItem.Click += new System.EventHandler(this.datosToolStripMenuItem_Click);
             // 
             // styleManager1
             // 
             this.styleManager1.ManagerStyle = DevComponents.DotNetBar.eStyle.Metro;
             this.styleManager1.MetroColorParameters = new DevComponents.DotNetBar.Metro.ColorTables.MetroColorGeneratorParameters(System.Drawing.Color.Silver, System.Drawing.Color.MediumPurple);
-            // 
-            // datosToolStripMenuItem
-            // 
-            this.datosToolStripMenuItem.Name = "datosToolStripMenuItem";
-            this.datosToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.datosToolStripMenuItem.Text = "Datos";
-            this.datosToolStripMenuItem.Click += new System.EventHandler(this.datosToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -291,6 +291,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "ENTIDADES";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

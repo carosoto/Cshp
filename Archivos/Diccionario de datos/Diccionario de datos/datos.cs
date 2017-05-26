@@ -31,28 +31,32 @@ namespace Diccionario_de_datos
         private List<List<secundaria>> ffk;
         private List<List<HASH_ESTATICA>> hhash;
         private List<HASH_ESTATICA> hash;
+        private List<Arbol> arbol;
+        private Arbol arbolAux;
         private secundaria fkaux;
         private primaria pkaux;
         private HASH_ESTATICA hashaux;
+        private Atrib atributoHoja;
         private long tam_archivoI;
         private long tam_modificar;
         private long tamañoTotal;
-        private Boolean modifica, elimina;
+        private Boolean modifica, elimina,hay_raiz;
         private int fila, columna;
-        private Boolean enmedio;
-        private Boolean primaria, secundaria;
+        private Boolean hay_datos;
         int filas = 0;
 
         public datos(List<Entidad> ent, Archivo arch)
         {
+            hay_datos = false;
+            atributoHoja = new Atrib();
             ppk = new List<List<primaria>>();
             ffk = new List<List<secundaria>>();
             hhash = new List<List<HASH_ESTATICA>>();
             hash = new List<HASH_ESTATICA>();
             hashaux = new HASH_ESTATICA();
+            arbol = new List<Arbol>();
             modifica = false;
             elimina = false;
-            enmedio = true;
             entidad = new Entidad();
             filas = 0;
             tam_modificar = 0;
@@ -75,9 +79,10 @@ namespace Diccionario_de_datos
             tipo_datos = new List<string>();
             datas_leidas = new List<string>();
             pk = new List<primaria>();
-            primaria = false;
+            arbolAux = new Arbol();
             fk = new List<secundaria>();
-            secundaria = false;
+            hay_raiz = false;
+            
         }
         public datos() { }
         public void leer_atributos()
@@ -172,10 +177,15 @@ namespace Diccionario_de_datos
                         {
                             asigna_espacioLlavesecundaria(at);
                         }
-                        if (at.GS_indice == 3)
+                        if (at.GS_indice == 4)
                         {
 
-
+                            asigna_espacionHash(at);
+                        }
+                        if(at.GS_indice == 5)
+                        {
+                            atributoHoja = at;
+                            asigna_espacioArbol(at,true,0);
                         }
                     }
                 }
@@ -202,10 +212,131 @@ namespace Diccionario_de_datos
         {
             modifica = false;
             sin_datos();
+            //acomodar al momento de agregar los registros
+            if (hay_raiz)
+            {
+                int pos = PosColumna();
+                int valor = Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value);
+                pos = buscaRaiz();
+                Boolean numMay = false;
+                int posNodo = 0;
+
+                for (int i = 0; i < arbol[pos].GS_nodos.Count; i++)
+                {
+                    if (valor > arbol[pos].GS_nodos[i].GS_valor)
+                    {
+                        MessageBox.Show("el valor es mayor");
+                        numMay = true;
+                        posNodo = i;
+                        break;
+                    }
+                    else
+                    {
+                        MessageBox.Show("el valor es menor");
+                        numMay = false;
+                        posNodo = i;
+                        break;
+                    }
+                }
+
+                // MessageBox.Show("valor del nodo = " + arbol[pos].GS_nodos[posNodo].GS_valor + " direccion del arbol " + arbol[pos].GS_direccion + " tipo de arbol " + arbol[pos].GS_tipo );
+                // si el valor es mayor
+                long direccion_hoja = 0;
+                if (numMay)
+                {
+                    direccion_hoja = arbol[pos].GS_nodos[posNodo + 1].GS_dirSiguiente;
+                    MessageBox.Show("ir a la izquierda a la direccion " + arbol[pos].GS_nodos[posNodo + 1].GS_dirSiguiente);
+
+
+                }
+                else
+                {
+                    direccion_hoja = arbol[pos].GS_nodos[posNodo].GS_dirSiguiente;
+                    MessageBox.Show("ir a la derecha a la direccion " + arbol[pos].GS_nodos[posNodo].GS_dirSiguiente);
+
+                }
+
+                //buscar arbol con la direccion
+                arbol[buscaHoja(direccion_hoja)].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
+                EscribeHojaPrimeraVez();
+
+
+            }
+            if (!hay_raiz)
+            {
+                int pos = PosColumna();
+
+                if (arbolAux.GS_tamNodo < 4)
+                {
+                    arbolAux.AgregaValorNodo(Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value),
+                        Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
+                }
+                else//hoja desbordada
+                {
+                    int valorDesbordado = arbolAux.ordenaValores(dataGridView1, filas, pos, Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value));
+                    Arbol hojaSig = new Arbol();
+                    Arbol raiz = new Arbol('r');
+
+                    arbolAux.GS_direccion = arbol[0].GS_direccion;
+                    arbol[0] = arbolAux;
+
+                    hojaSig.AsignaMemoria(arch); // siguiente hoja
+                    raiz.AsignaMemoria(arch); // raiz
+                                              //valores para el siguiente
+                    hojaSig.AgregaValorNodo(arbol[0].GS_nodos[2].GS_valor, arbol[0].GS_nodos[2].GS_dirSiguiente);
+                    hojaSig.AgregaValorNodo(arbol[0].GS_nodos[3].GS_valor, arbol[0].GS_nodos[3].GS_dirSiguiente);
+                    int index = 0;
+                    for (; index < filas; index++)
+                    {
+                        if (valorDesbordado == Convert.ToInt32(dataGridView1.Rows[index].Cells[pos].Value)) break;
+
+                    }
+
+                    hojaSig.AgregaValorNodo(valorDesbordado, Convert.ToInt32(dataGridView1.Rows[index].Cells[0].Value));
+
+                    arbol.Add(hojaSig);
+                    //valores para la raiz
+                    raiz.AgregaValorNodo(arbol[0].GS_nodos[2].GS_valor, arbol[0].GS_direccion);
+                    raiz.AgregaValorNodo(-1, hojaSig.GS_direccion);
+                    arbol.Add(raiz);
+                    asigna_espacioArbol(atributoHoja, false, raiz.GS_direccion);
+                    arbol[0].GS_nodos[2].GS_valor = -1;
+                    arbol[0].GS_nodos[2].GS_dirSiguiente = -1;
+                    arbol[0].GS_nodos[3].GS_valor = -1;
+                    arbol[0].GS_nodos[3].GS_dirSiguiente = -1;
+                    EscribeHojaPrimeraVez();
+                    hay_raiz = true;
+                }
+            }
 
 
 
         } //grabar datos
+
+        private int buscaHoja(long direccion)
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'h')
+                {
+                    if(arbol[i].GS_direccion == direccion)
+                    break;
+                }
+            }
+            return i;
+        }
+        private int buscaRaiz()
+        {
+            int i = 0;
+           for(; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'r') break;
+            }
+            return i;
+
+        }
+
 
         private void sin_datos()
         {
@@ -455,7 +586,7 @@ namespace Diccionario_de_datos
 
                 if (e.RowIndex == 0)
                 {
-                    enmedio = true;
+                    
                     if (filas >= 0)
                         filas--;
                     if (filas <= 0)
@@ -469,7 +600,7 @@ namespace Diccionario_de_datos
 
                 if (e.RowIndex == filas - 1 && filas - 1 > 0)
                 {
-                    enmedio = true;
+                    
                     direccion_siguiente = -1;
                     dataGridView1.Rows[e.RowIndex - 1].Cells[tipo_datos.Count - 1].Value = direccion_siguiente;
                     direccion_inicial = Convert.ToInt64(dataGridView1.Rows[e.RowIndex - 1].Cells[0].Value) + (tamaño_metadato - 8);
@@ -493,7 +624,7 @@ namespace Diccionario_de_datos
                 if (e.RowIndex != 0 && filas - 1 > 0 && e.RowIndex < filas - 1)
                 {
 
-                    enmedio = true;
+                   
                     direccion_siguiente = Convert.ToInt64(dataGridView1.Rows[e.RowIndex].Cells[dataGridView1.ColumnCount - 1].Value);
                     dataGridView1.Rows[e.RowIndex - 1].Cells[dataGridView1.ColumnCount - 1].Value = direccion_siguiente;
 
@@ -1046,6 +1177,33 @@ namespace Diccionario_de_datos
 
             }
 
+            if(aux.GS_indice == 5)
+            {
+              
+
+                dataGridView2.Rows.Clear();
+                dataGridView2.ColumnCount = 11;
+                dataGridView2.Columns[0].Name = "DIR";
+                dataGridView2.Columns[1].Name = "TIPO";
+                dataGridView2.Columns[2].Name = "AP";
+                dataGridView2.Columns[3].Name = "VAL";
+                dataGridView2.Columns[4].Name = "AP";
+                dataGridView2.Columns[5].Name = "VAL";
+                dataGridView2.Columns[6].Name = "AP";
+                dataGridView2.Columns[7].Name = "VAL";
+                dataGridView2.Columns[8].Name = "AP";
+                dataGridView2.Columns[9].Name = "VAL";
+                dataGridView2.Columns[10].Name = "DIR SIG";
+                leerRaiz();
+                foreach(Arbol a in arbol)
+                {
+                    dataGridView2.Rows.Add(a.GS_direccion,a.GS_tipo,a.GS_nodos[0].GS_dirSiguiente,a.GS_nodos[0].GS_valor,
+                    a.GS_nodos[1].GS_dirSiguiente, a.GS_nodos[1].GS_valor, a.GS_nodos[2].GS_dirSiguiente, a.GS_nodos[2].GS_valor,
+                    a.GS_nodos[3].GS_dirSiguiente, a.GS_nodos[3].GS_valor,a.GS_dirSiguiente);
+                }
+
+                EscribeHojaPrimeraVez();
+            }
 
         }
 
@@ -1060,7 +1218,7 @@ namespace Diccionario_de_datos
 
             if (at.GS_indice == 2)
             {
-                secundaria = true;
+               
                 Atrib aux = new Atrib();
                 aux = at;
                 aux.GS_dir_indice = dir_inicial;
@@ -1165,7 +1323,7 @@ namespace Diccionario_de_datos
 
             if (at.GS_indice == 1)
             {
-                primaria = true;
+              
 
                 Atrib aux = new Atrib();
                 aux = at;
@@ -1291,6 +1449,27 @@ namespace Diccionario_de_datos
                 }
 
             }
+        }
+
+        private void asigna_espacioArbol(Atrib at,Boolean change,long dir)
+        {
+            Atrib aux = new Atrib();
+            Arbol a = new Arbol();
+            aux = at;
+            if (change)
+            {
+                a.AsignaMemoria(arch);
+                aux.GS_dir_indice = a.GS_direccion;
+            }
+            else
+            {
+                aux.GS_dir_indice = dir;
+            }
+
+            long new_dir = aux.GS_dir_atributo;
+            arch.Modifica_atributo(new_dir, aux);
+            if(change)
+            arbol.Add(a);
         }
 
         private void leer_secundaria()
@@ -1545,5 +1724,173 @@ namespace Diccionario_de_datos
             }
 
         }
+
+        private void leerRaiz()
+        {
+            Atrib aux = new Atrib();
+            arbol.Clear();
+            foreach (Atrib aa in atrib_)
+            {
+                if (new string(aa.GS_nombre) == comboBox2.SelectedItem.ToString())
+                {
+                    aux = aa;
+                    break;
+                }
+
+            }
+            long direccion_inicial = aux.GS_dir_indice;
+            
+                Stream s = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Read);
+                BinaryReader r = new BinaryReader(s);
+                Arbol a = new Arbol();
+                s.Seek(direccion_inicial, SeekOrigin.Begin);
+                a.GS_direccion = r.ReadInt64();
+                a.GS_tipo = r.ReadChar();
+                a.GS_nodos[0].GS_dirSiguiente = r.ReadInt64();
+                a.GS_nodos[0].GS_valor = r.ReadInt32();
+                a.GS_nodos[1].GS_dirSiguiente = r.ReadInt64();
+                a.GS_nodos[1].GS_valor = r.ReadInt32();
+                a.GS_nodos[2].GS_dirSiguiente = r.ReadInt64();
+                a.GS_nodos[2].GS_valor = r.ReadInt32();
+                a.GS_nodos[3].GS_dirSiguiente = r.ReadInt64();
+                a.GS_nodos[3].GS_valor = r.ReadInt32();
+                a.GS_dirSiguiente = r.ReadInt64();
+                s.Close();
+                r.Close();
+                s.Dispose();
+                r.Dispose();
+                arbol.Add(a);
+
+                for(int i = 0; i < 4; i++)
+                    {
+                if(a.GS_nodos[i].GS_dirSiguiente != -1)
+                {
+                    leerHoja(a.GS_nodos[i].GS_dirSiguiente);
+                }
+                    }
+                
+                hay_raiz = true;
+
+            }
+
+        private void leerHoja(long dir)
+        {
+
+            Stream s = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Read);
+            BinaryReader r = new BinaryReader(s);
+            Arbol a = new Arbol();
+            s.Seek(dir, SeekOrigin.Begin);
+            a.GS_direccion = r.ReadInt64();
+            a.GS_tipo = r.ReadChar();
+            a.GS_nodos[0].GS_dirSiguiente = r.ReadInt64();
+            a.GS_nodos[0].GS_valor = r.ReadInt32();
+            a.GS_nodos[1].GS_dirSiguiente = r.ReadInt64();
+            a.GS_nodos[1].GS_valor = r.ReadInt32();
+            a.GS_nodos[2].GS_dirSiguiente = r.ReadInt64();
+            a.GS_nodos[2].GS_valor = r.ReadInt32();
+            a.GS_nodos[3].GS_dirSiguiente = r.ReadInt64();
+            a.GS_nodos[3].GS_valor = r.ReadInt32();
+            a.GS_dirSiguiente = r.ReadInt64();
+            s.Close();
+            r.Close();
+            s.Dispose();
+            r.Dispose();
+            arbol.Add(a);
+            hay_raiz = true;
+            
+        }
+        
+
+        private void EscribirHoja()
+        {
+            long dir = 0;
+            for(int i = 0; i < dataGridView2.RowCount-1; i++)
+            {
+                
+                dir = Convert.ToInt64(dataGridView2.Rows[i].Cells[0].Value);
+                for (int j = 0; j < dataGridView2.ColumnCount; j++)
+                {
+                    
+                    
+                    FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                    BinaryWriter writer = new BinaryWriter(stream);
+                    stream.Seek(dir, SeekOrigin.Begin);
+                    if (dataGridView2.Columns[j].Name == "DIR" || dataGridView2.Columns[j].Name == "AP" || dataGridView2.Columns[j].Name == "DIRS")
+                    {
+                        writer.Write(Convert.ToInt64(dataGridView2.Rows[i].Cells[j].Value));
+                        dir += 8;
+                    }
+                    if (dataGridView2.Columns[j].Name == "TIPO")
+                    {
+                        writer.Write(Convert.ToChar(dataGridView2.Rows[i].Cells[j].Value));
+                        dir += 1;
+
+                    }
+                    if(dataGridView2.Columns[j].Name == "VAL")
+                    {
+                        writer.Write(Convert.ToInt32(dataGridView2.Rows[i].Cells[j].Value));
+                        dir += 4;
+                    }
+                   
+                    writer.Close();
+                    writer.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+
+                }
+                dir = 0;
+            }
+
+        }
+
+        private void EscribeHojaPrimeraVez()
+        {
+            foreach (Arbol a in arbol)
+            {
+                long dir = a.GS_direccion;
+                FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                BinaryWriter writer = new BinaryWriter(stream);
+                stream.Seek(dir, SeekOrigin.Begin);
+                writer.Write(a.GS_direccion);
+                writer.Write(a.GS_tipo);
+                for (int i = 0; i < 4; i++)
+                {
+                    writer.Write(a.GS_nodos[i].GS_dirSiguiente);
+                    writer.Write(a.GS_nodos[i].GS_valor);
+                }
+                writer.Write(a.GS_dirSiguiente);
+                writer.Close();
+                writer.Dispose();
+                stream.Close();
+                stream.Dispose();
+
+            }
+        }
+
+        private int PosColumna()
+        {
+            int j = 0;
+            String nombre = "";
+            foreach (Atrib a in atrib_)
+            {
+                if (a.GS_indice == 5)
+                {
+                    nombre = new string(a.GS_nombre);
+                    break;
+                }
+
+            }
+
+            for (; j < dataGridView1.ColumnCount; j++)
+            {
+                if (dataGridView1.Columns[j].Name == nombre)
+                {
+                    j = dataGridView1.Columns[j].Index;
+                    break;
+                }
+            }
+            return j;
+        }
+       
     }
 }
