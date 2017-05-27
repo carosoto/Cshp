@@ -71,6 +71,7 @@ namespace Diccionario_de_datos
         public int GS_tamNodo
         {
             get { return cont; }
+            set { cont = value; }
         }
 
         public int posRiazVacia()
