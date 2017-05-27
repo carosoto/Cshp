@@ -258,20 +258,48 @@ namespace Diccionario_de_datos
                 }
                 MessageBox.Show("DIRIGIRSE A LA DIRECCION" + direccion_intermedio);
 
-
-                for(int k = 0; k < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos.Count; k++)
+                int k = 0;
+                for(; k < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos.Count; k++)
                 {
-                    if(valor > arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[i].GS_valor)
+                    if(valor > arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[k].GS_valor && arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[k].GS_valor != -1)
                     {
-
-
+                        numMay = true;
+                        posNodo = k;
+                    }
+                    if(valor < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[k].GS_valor && arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[k].GS_valor != -1)
+                    {
+                        numMay = false;
+                        posNodo = k;
+                        break;
                     }
 
                 }
-
-               
                 long direccion_hoja = 0;
+                if (numMay)
+                {
+                    if (posNodo < 3)
+                        direccion_hoja = arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[posNodo + 1].GS_dirSiguiente;
+                    else
+                        direccion_hoja = arbol[buscaIntermedio(direccion_intermedio)].GS_dirSiguiente;
+                }
+                else
+                {
+                    direccion_hoja = arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[posNodo].GS_dirSiguiente;
+                }
+
                 
+
+                MessageBox.Show("direccion hoja " + direccion_hoja);
+
+
+                int posHoja = buscaHoja(direccion_hoja);
+
+                if (arbol[posHoja].GS_datosPositivos() <= 3)
+                {
+                    arbol[posHoja].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
+                    arbol[posHoja].ordena(dataGridView1, filas, PosColumna());
+
+                }
 
 
                 //dirigirse al nodo intermedio y buscar si el num es mayor 
@@ -653,7 +681,7 @@ namespace Diccionario_de_datos
             int i = 0;
             for (; i < arbol.Count; i++)
             {
-                if (arbol[i].GS_tipo == 'h')
+                if (arbol[i].GS_tipo == 'i')
                 {
                     if (arbol[i].GS_direccion == direccion)
                         break;

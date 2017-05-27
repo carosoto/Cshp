@@ -246,7 +246,6 @@ namespace Diccionario_de_datos
             {
                 if(n.GS_valor > may) { may = n.GS_valor;}
             }
-            MessageBox.Show("el mayor del nodo intermedio " + may);
             foreach(Arbol a in arbol)
             {
                 if(a.GS_tipo != 'i' && a.GS_tipo != 'r')
@@ -263,8 +262,7 @@ namespace Diccionario_de_datos
 
                 }
             }
-
-            MessageBox.Show("DIRECCION DEL MAYOR " + dir);
+            
             int pos = GS_datosPositivos();
             
             GS_nodos[pos].GS_dirSiguiente = dir;
