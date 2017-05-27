@@ -83,53 +83,109 @@ namespace Diccionario_de_datos
             return -1;
         }
         
-        public void ordenaRaiz( Arbol a , List<Arbol> la)
+        public void ordenaRaiz( Arbol a ,long ultDir,Boolean may)
         {
             List<int> n = new List<int>();
+            List<Nodo> ln = new List<Nodo>();
             Arbol aux = new Arbol();
             aux = a;
             foreach(Nodo nax in GS_nodos)
             {
-                if (nax.GS_valor != -1) n.Add(nax.GS_valor);
+                if (nax.GS_valor != -1) { n.Add(nax.GS_valor); ln.Add(nax);}
             }
             n.Sort();
             this.reiniciaNodo();
-            
-
-            for(int i = 0; i < n.Count; i++)
+           
+            for (int i = 0; i < n.Count; i++)
             {
                 GS_nodos[i].GS_valor = n[i];
+
+            }
+            if (may)
+            {
+
+                for (int i = 0; i < ln.Count; i++)
+                {
+                    if (ln[i].GS_valor == GS_nodos[i].GS_valor)
+                    {
+                        if (i <= 2)
+                            GS_nodos[i + 1].GS_dirSiguiente = ln[i].GS_dirDerecha;
+                        //
+                        else
+                        {
+                            GS_nodos[3].GS_dirSiguiente = GS_nodos[2].GS_dirDerecha;
+                            GS_dirSiguiente = ln[i].GS_dirDerecha;
+                            break;
+                        }
+                    }
+                }
+            }
+           
+        }
+
+
+        public void ordenaRaizMen(List<Arbol> arbol, int indice, Arbol raiz)
+        {
+
+            int valor = 0;
+
+            List<int> n = new List<int>();
+            List<Nodo> ln = new List<Nodo>();
+            foreach (Nodo nax in GS_nodos)
+            {
+                if (nax.GS_valor != -1) { n.Add(nax.GS_valor); ln.Add(nax); }
+            }
+            n.Sort();
+            this.reiniciaNodo();
+
+            for (int i = 0; i < n.Count; i++)
+            {
+                GS_nodos[i].GS_valor = n[i];
+
             }
 
-            int ix = 0, iy = 0 ;
-            Boolean sal = false;
-            for(;ix < la.Count; ix++)
+            for (int i = 0; i < arbol[indice].GS_nodos.Count; i++)
             {
-                for(;iy < la[ix].GS_nodos.Count; iy++)
+                if (arbol[indice].GS_nodos[i].GS_valor != -1)
                 {
-                    if(GS_nodos[iy].GS_valor > la[ix].GS_nodos[iy].GS_valor && la[ix].GS_nodos[iy].GS_valor != -1)
+                    valor = arbol[indice].GS_nodos[i].GS_valor;
+
+                    foreach (Arbol a in arbol)
                     {
-                        GS_nodos[iy].GS_dirSiguiente = la[ix].GS_direccion;
-                        sal = true;
-                        break;
+                        if (a.GS_tipo != 'r')
+                        {
+                            foreach (Nodo n1 in a.GS_nodos)
+                            {
+                                if (n1.GS_valor == valor)
+                                {
+
+                                    arbol[indice].GS_nodos[i].GS_dirIzquierda = a.GS_direccion;
+                                    break;
+
+
+                                }
+
+                            }
+                        }
+
+
                     }
 
                 }
 
-                if (sal) break;
-
             }
 
-
-
-            //acomodar direcciones
-
-
-           
+            for(int i = 0; i < arbol[indice].GS_nodos.Count; i++)
+            {
+                if(i < 3)
+                GS_nodos[i+1].GS_dirSiguiente = arbol[indice].GS_nodos[i].GS_dirIzquierda;
+                else
+                {
+                    GS_dirSiguiente = arbol[indice].GS_nodos[i].GS_dirIzquierda;
+                }
+            }
 
             
-
-
         }
 
         public int ordenaValores(DataGridView tabla, int filas,int pos, int valorDesbordado)

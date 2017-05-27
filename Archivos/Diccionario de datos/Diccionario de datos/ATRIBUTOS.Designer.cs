@@ -125,6 +125,7 @@
             this.Nombre.Name = "Nombre";
             this.Nombre.Size = new System.Drawing.Size(68, 20);
             this.Nombre.TabIndex = 5;
+            this.Nombre.Text = "Clave";
             // 
             // Longitud
             // 
@@ -136,6 +137,7 @@
             this.Longitud.Name = "Longitud";
             this.Longitud.Size = new System.Drawing.Size(82, 20);
             this.Longitud.TabIndex = 6;
+            this.Longitud.Text = "4";
             // 
             // Entidad
             // 
@@ -164,6 +166,7 @@
             this.Tipo.Name = "Tipo";
             this.Tipo.Size = new System.Drawing.Size(82, 21);
             this.Tipo.TabIndex = 8;
+            this.Tipo.Text = "INT";
             this.Tipo.SelectedIndexChanged += new System.EventHandler(this.Tipo_SelectedIndexChanged);
             // 
             // Clave
@@ -185,6 +188,7 @@
             this.Clave.Size = new System.Drawing.Size(82, 21);
             this.Clave.Sorted = true;
             this.Clave.TabIndex = 9;
+            this.Clave.Text = "5";
             // 
             // Nuevo
             // 

@@ -10,11 +10,15 @@ namespace Diccionario_de_datos
     {
         private int valor;
         private long dir_siguiente;
+        private long dir_izquierda;
+        private long dir_derecha;
         private int m;
         public Nodo()
         {
             valor = -1;
             dir_siguiente = -1;
+            dir_izquierda = -1;
+            dir_derecha = -1;
             m = 0;
         }
 
@@ -34,6 +38,16 @@ namespace Diccionario_de_datos
         {
             get { return dir_siguiente; }
             set { dir_siguiente = value; }
+        }
+        public long GS_dirIzquierda
+        {
+            get { return dir_izquierda; }
+            set { dir_izquierda = value; }
+        }
+        public long GS_dirDerecha
+        {
+            get { return dir_derecha; }
+            set { dir_derecha = value; }
         }
 
     }
