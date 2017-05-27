@@ -188,7 +188,7 @@ namespace Diccionario_de_datos
             
         }
 
-        public int ordenaValores(DataGridView tabla, int filas,int pos, int valorDesbordado)
+       public int ordenaValores(DataGridView tabla, int filas,int pos, int valorDesbordado)
         {
             List<int> valores = new List<int>();
             foreach (Nodo n in nodo) {
@@ -215,6 +215,62 @@ namespace Diccionario_de_datos
             }
             return valores[4];
             
+        }
+
+        public int DameValDesRaiz(int valorDesbordado)
+        {
+            List<int> datos = new List<int>();
+            foreach(Nodo n in GS_nodos)
+            {
+                datos.Add(n.GS_valor);
+            }
+
+            datos.Add(valorDesbordado);
+            datos.Sort();
+
+            return datos[4];
+
+
+            
+
+        }
+
+        public void buscaDirMay(List<Arbol> arbol)
+        {
+
+            //primero buscar el numero mayor
+
+            int may = 0;
+            long dir = 0;
+            foreach(Nodo n in GS_nodos)
+            {
+                if(n.GS_valor > may) { may = n.GS_valor;}
+            }
+            MessageBox.Show("el mayor del nodo intermedio " + may);
+            foreach(Arbol a in arbol)
+            {
+                if(a.GS_tipo != 'i' && a.GS_tipo != 'r')
+                {
+                    foreach(Nodo n in a.GS_nodos)
+                    {
+                        if(may == n.GS_valor)
+                        {
+                            dir = a.GS_direccion;
+                            break;
+                        }
+                    }
+
+
+                }
+            }
+
+            MessageBox.Show("DIRECCION DEL MAYOR " + dir);
+            int pos = GS_datosPositivos();
+            
+            GS_nodos[pos].GS_dirSiguiente = dir;
+
+
+
         }
 
        public void reiniciaNodo()

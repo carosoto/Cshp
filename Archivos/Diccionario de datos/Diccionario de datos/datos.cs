@@ -213,11 +213,77 @@ namespace Diccionario_de_datos
             modifica = false;
             sin_datos();
             //acomodar al momento de agregar los registros
-            if(hay_intermedio && hay_intermedio) { MessageBox.Show("crea intermedio"); }
 
-            
+            if (hay_raiz && hay_intermedio)
+            {
+
+                MessageBox.Show("ya hay intermedio");
+                int valor = Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosColumna()].Value);
+                int pos = buscaRaiz();
+                int posNodo = 0;
+                Boolean numMay = false;
+                //buscar primero en la raiz si el num es may o es men
+                int i = 0;
+                for (; i < arbol[pos].GS_nodos.Count; i++)
+                {
+
+                    if (valor > arbol[pos].GS_nodos[i].GS_valor && arbol[pos].GS_nodos[i].GS_valor != -1)
+                    {
+
+                        numMay = true;
+                        posNodo = i;
+                    }
+                    if (valor < arbol[pos].GS_nodos[i].GS_valor && arbol[pos].GS_nodos[i].GS_valor != -1)
+                    {
+
+                        numMay = false;
+                        posNodo = i;
+                        break;
+                    }
+                }
+                long direccion_intermedio = 0;
+                if (numMay)
+                {
+                    if (posNodo < 3)
+                        direccion_intermedio = arbol[pos].GS_nodos[posNodo + 1].GS_dirSiguiente;
+                    else
+                        direccion_intermedio = arbol[pos].GS_dirSiguiente;
+
+
+                }
+                else
+                {
+                    direccion_intermedio = arbol[pos].GS_nodos[posNodo].GS_dirSiguiente;
+
+                }
+                MessageBox.Show("DIRIGIRSE A LA DIRECCION" + direccion_intermedio);
+
+
+                for(int k = 0; k < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos.Count; k++)
+                {
+                    if(valor > arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[i].GS_valor)
+                    {
+
+
+                    }
+
+                }
+
+               
+                long direccion_hoja = 0;
+                
+
+
+                //dirigirse al nodo intermedio y buscar si el num es mayor 
+
+
+
+                //dirigirse a la hoja y buscar si el num es may o men
+            }
+
             if (hay_raiz && !hay_intermedio)
             {
+               
                 if (arbol[buscaRaiz()].GS_datosPositivos() <= 3)
                 {
                     int pos = PosColumna();
@@ -271,7 +337,7 @@ namespace Diccionario_de_datos
                     else
                     {
 
-
+                        MessageBox.Show("nueva hoja");
                         int PosC = PosColumna();
                         int valorDesbordado = arbol[buscaHoja(direccion_hoja)].ordenaValores(dataGridView1, filas, PosC, Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosC].Value));
                         Arbol hojaSig = new Arbol();
@@ -309,9 +375,7 @@ namespace Diccionario_de_datos
                         else
                             arbol[raizPos].ordenaRaizMen(arbol, raizPos, arbol[raizPos]);
 
-
-
-
+                        
                         arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor = -1;
                         arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente = -1;
                         arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor = -1;
@@ -325,17 +389,136 @@ namespace Diccionario_de_datos
                 }
                 else
                 {
-                    hay_intermedio = true;
+                    //primero hay que verificar si el nuevo valor desborda una hoja
+                    
+                    int pos = PosColumna();
+                    int valor = Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value);
+                    pos = buscaRaiz();
+                    Boolean numMay = false;
+                    int posNodo = 0;
+
+
+                    int i = 0;
+                    for (; i < arbol[pos].GS_nodos.Count; i++)
+                    {
+
+                        if (valor > arbol[pos].GS_nodos[i].GS_valor && arbol[pos].GS_nodos[i].GS_valor != -1)
+                        {
+
+                            numMay = true;
+                            posNodo = i;
+                        }
+                        if (valor < arbol[pos].GS_nodos[i].GS_valor && arbol[pos].GS_nodos[i].GS_valor != -1)
+                        {
+
+                            numMay = false;
+                            posNodo = i;
+                            break;
+                        }
+                    }
+
+                    long direccion_hoja = 0;
+                    if (numMay)
+                    {
+                        if (posNodo < 3)
+                            direccion_hoja = arbol[pos].GS_nodos[posNodo + 1].GS_dirSiguiente;
+                        else
+                            direccion_hoja = arbol[pos].GS_dirSiguiente;
+
+
+                    }
+                    else
+                    {
+                        direccion_hoja = arbol[pos].GS_nodos[posNodo].GS_dirSiguiente;
+
+                    }
+
+                    //buscar arbol con la direccion
+                    if (arbol[buscaHoja(direccion_hoja)].GS_datosPositivos() <= 3)
+                    {
+                        arbol[buscaHoja(direccion_hoja)].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
+                        arbol[buscaHoja(direccion_hoja)].ordena(dataGridView1, filas, PosColumna());
+                       
+                    }
+
+                    // si el nuevo valor si desborda la hoja significa que hay que crear la nueva hoja y hacer algoritmo para separar
+                    else
+                    {
+                        
+                        int PosC = PosColumna();
+                        int valorDesbordado = arbol[buscaHoja(direccion_hoja)].ordenaValores(dataGridView1, filas, PosC, Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosC].Value));
+                        Arbol hojaSig = new Arbol();
+
+                        hojaSig.AsignaMemoria(arch); // siguiente hoja
+
+                        hojaSig.AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente);
+                        hojaSig.AgregaValorNodo(arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor, arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_dirSiguiente);
+                        //
+
+                        int index = 0;
+                        for (; index < filas; index++)
+                        {
+                            if (valorDesbordado == Convert.ToInt32(dataGridView1.Rows[index].Cells[PosC].Value)) break;
+
+                        }
+
+                        hojaSig.AgregaValorNodo(valorDesbordado, Convert.ToInt64(dataGridView1.Rows[index].Cells[0].Value));
+
+                        arbol.Add(hojaSig);
+
+                        //buscar el valor desbordado de la raiz
+                        int valor_desRaiz = arbol[buscaRaiz()].DameValDesRaiz(arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor);
+                        
+                        arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_valor = -1;
+                        arbol[buscaHoja(direccion_hoja)].GS_nodos[2].GS_dirSiguiente = -1;
+                        arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_valor = -1;
+                        arbol[buscaHoja(direccion_hoja)].GS_nodos[3].GS_dirSiguiente = -1;
+                        
+                        Arbol inter1 = new Arbol('i');
+                        Arbol inter2 = new Arbol('i');
+                        inter1.AsignaMemoria(arch);
+                        inter2.AsignaMemoria(arch);
+
+                        inter1.GS_nodos[0].GS_valor = arbol[buscaRaiz()].GS_nodos[0].GS_valor;
+                        inter1.GS_nodos[0].GS_dirSiguiente = arbol[buscaRaiz()].GS_nodos[0].GS_dirSiguiente;
+
+                        inter1.GS_nodos[1].GS_valor = arbol[buscaRaiz()].GS_nodos[1].GS_valor;
+                        inter1.GS_nodos[1].GS_dirSiguiente = arbol[buscaRaiz()].GS_nodos[1].GS_dirSiguiente;
+
+                        inter2.GS_nodos[0].GS_valor = arbol[buscaRaiz()].GS_nodos[3].GS_valor;
+                        inter2.GS_nodos[0].GS_dirSiguiente = arbol[buscaRaiz()].GS_nodos[3].GS_dirSiguiente;
+
+                        inter2.GS_nodos[1].GS_valor = valor_desRaiz;
+                        inter2.GS_nodos[1].GS_dirSiguiente = arbol[buscaRaiz()].GS_dirSiguiente;
+                        arbol[buscaRaiz()].GS_nodos[0].GS_valor = arbol[buscaRaiz()].GS_nodos[2].GS_valor;
+                        arbol[buscaRaiz()].GS_nodos[0].GS_dirSiguiente = inter1.GS_direccion;
+                        arbol[buscaRaiz()].GS_nodos[1].GS_dirSiguiente = inter2.GS_direccion;
+                        arbol[buscaRaiz()].GS_nodos[1].GS_valor = -1;
+                        arbol[buscaRaiz()].GS_nodos[2].GS_dirSiguiente = -1;
+                        arbol[buscaRaiz()].GS_nodos[2].GS_valor = -1;
+                        arbol[buscaRaiz()].GS_nodos[3].GS_dirSiguiente = -1;
+                        arbol[buscaRaiz()].GS_nodos[3].GS_valor = -1;
+                        arbol[buscaRaiz()].GS_dirSiguiente = -1;
+                        inter1.buscaDirMay(arbol);
+                        inter2.buscaDirMay(arbol);
+                        arbol.Add(inter1);
+                        arbol.Add(inter2);
+
+                        hay_intermedio = true;
+                       
+
+                    }
                 }
 
             }
+           
             if (!hay_raiz && !hay_intermedio)
             {
                 int pos = PosColumna();
 
                 if (arbolAux.GS_tamNodo < 4)
                 {
-                    arbolAux.AgregaValorNodo(Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value),
+                        arbolAux.AgregaValorNodo(Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value),
                         Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
                 }
                 else//hoja desbordada
@@ -403,7 +586,6 @@ namespace Diccionario_de_datos
             }
 
         }
-
         private void buscaValorHojaM()
         {
             int indice = buscaRaiz();
@@ -466,8 +648,28 @@ namespace Diccionario_de_datos
             return i;
 
         }
-
-
+        private int buscaIntermedio(long direccion)
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'h')
+                {
+                    if (arbol[i].GS_direccion == direccion)
+                        break;
+                }
+            }
+            return i;
+        }
+        private int buscaIntermedio()
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'r') break;
+            }
+            return i;
+        }
         private void sin_datos()
         {
 
