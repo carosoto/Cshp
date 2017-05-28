@@ -155,6 +155,7 @@ namespace Diccionario_de_datos
             tam_modificar = 0;
             leer_atributos();
             dataGridView1.Rows.Clear();
+            dataGridView2.Rows.Clear();
             foreach (Entidad en in ent_)
             {
 
