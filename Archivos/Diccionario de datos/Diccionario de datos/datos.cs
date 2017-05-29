@@ -227,7 +227,7 @@ namespace Diccionario_de_datos
                 if (hay_raiz && hay_intermedio)
                 {
 
-                    MessageBox.Show("ya hay intermedio");
+                   
                     int valor = Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosColumna()].Value);
                     int pos = buscaRaiz();
                     int posNodo = 0;
@@ -266,7 +266,7 @@ namespace Diccionario_de_datos
                         direccion_intermedio = arbol[pos].GS_nodos[posNodo].GS_dirSiguiente;
 
                     }
-                    MessageBox.Show("DIRIGIRSE A LA DIRECCION" + direccion_intermedio);
+                    
 
                     int k = 0;
                     for (; k < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos.Count; k++)
@@ -296,18 +296,44 @@ namespace Diccionario_de_datos
                     {
                         direccion_hoja = arbol[buscaIntermedio(direccion_intermedio)].GS_nodos[posNodo].GS_dirSiguiente;
                     }
-
-
-
-                    MessageBox.Show("direccion hoja " + direccion_hoja);
-
-
+                    
                     int posHoja = buscaHoja(direccion_hoja);
 
-                    if (arbol[posHoja].GS_datosPositivos() <= 3)
+                   
+
+                    MessageBox.Show("LA HOJA TIENE " + arbol[posHoja].GS_datosPositivos() + " DATOS");
+
+                    if (arbol[posHoja].GS_datosPositivos() < 4)
                     {
-                        arbol[posHoja].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
-                        arbol[posHoja].ordena(dataGridView1, filas, PosColumna());
+                        if (arbol[posHoja].GS_datosPositivos() <= 3)
+                        {
+                            arbol[posHoja].AgregaValorNodo(valor, Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value));
+                            arbol[posHoja].ordena(dataGridView1, filas, PosColumna());
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("no se puede agregar dato la hoja esta llena , crea nueva hoja");
+                        int valorDesbordado = arbol[posHoja].ordenaValores(dataGridView1, filas, PosColumna(), Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosColumna()].Value));
+                        Arbol aux = new Arbol();
+                        aux.AsignaMemoria(arch);
+                        aux.AgregaValorNodo(arbol[posHoja].GS_nodos[2].GS_valor,arbol[posHoja].GS_nodos[2].GS_dirSiguiente);
+                        aux.AgregaValorNodo(arbol[posHoja].GS_nodos[3].GS_valor, arbol[posHoja].GS_nodos[3].GS_dirSiguiente);
+                        int index = 0;
+                        for (; index < filas; index++)
+                        {
+                            if (valorDesbordado == Convert.ToInt32(dataGridView1.Rows[index].Cells[pos].Value)) break;
+
+                        }
+
+                        aux.AgregaValorNodo(valorDesbordado, Convert.ToInt32(dataGridView1.Rows[index].Cells[0].Value));
+                        arbol.Add(aux);
+                        arbol[buscaIntermedio(direccion_intermedio)].AgregaValorNodo(arbol[posHoja].GS_nodos[2].GS_valor, arbol[posHoja].GS_nodos[2].GS_dirSiguiente);
+                        arbol[posHoja].GS_nodos[2].GS_valor = -1;
+                        arbol[posHoja].GS_nodos[2].GS_dirSiguiente = -1;
+                       // arbol[buscaIntermedio(direccion_intermedio)].ordenaRaiz(arbol,);
+
 
                     }
                     
@@ -1770,51 +1796,7 @@ namespace Diccionario_de_datos
 
         private void asigna_espacionHash(Atrib at)
         {
-            hhash.Clear();
-            hash.Clear();
-            long tam = 0;
-            long dir_inicial = 0;
-            dir_inicial = arch.Tam_archivo();
-            if (at.GS_indice == 4)
-            {
-                Atrib aux = new Atrib();
-                aux = at;
-                aux.GS_dir_indice = dir_inicial;
-                long new_dir = aux.GS_dir_atributo;
-                arch.Modifica_atributo(new_dir, aux);
-                if (at.GS_tipo == 'I')
-                {
-
-                    long[] casillas = new long[3];
-                    //primero rellenar las casillas
-                    for (int i = 0; i < 3; i++)
-                    {
-                        HASH_ESTATICA Haux = new HASH_ESTATICA();
-                        Haux.GS_direccion_inicial = dir_inicial + tam;
-                        tam += 24;
-                        if (i == 0)
-                            Haux.GS_casillas_direccionesCubeta[i] = dir_inicial + tam;
-                        else
-                            Haux.GS_casillas_direccionesCubeta[i] = -1;
-                        Haux.GS_direccion_siguiente = dir_inicial + tam;
-                        hash.Add(Haux);
-
-                    }
-
-                    long[][] cubeta = new long[3][];
-                    // despues de rellenar las casillas crear solo el 1er cajon y rellenarlo
-                    for (int i = 0; i < 3; i++)
-                    {
-                        for (int j = 0; j < 3; j++)
-                        {
-
-                        }
-                    }
-
-
-                }
-
-            }
+           
         }
 
         private void asigna_espacioArbol(Atrib at,Boolean change,long dir)

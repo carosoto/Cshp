@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Diccionario_de_datos
 {
+
+    //faltantes:
+    // agrega metodo para asignar memoria
     class cubeta
     {
         private long dir_inicial;
@@ -59,6 +63,30 @@ namespace Diccionario_de_datos
             set { valor_cadena = value; }
         }
 
+        public void  asignaMemoriaEnteros(Archivo arch,int posCubeta)
+        {
+            long dir_inicial = 0;
+            dir_inicial = arch.Tam_archivo();
+            GS_dirInicial = dir_inicial;
+            FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+            BinaryWriter writer = new BinaryWriter(stream);
+            stream.Seek(dir_inicial, SeekOrigin.Begin);
+            writer.Write(GS_dirInicial);
+            writer.Write(dir_valor);
+            writer.Write(valor_entero);
+            if (posCubeta == 2) writer.Write(dir_sig_cubeta); // escribe solamente en la 3a cubeta
+            writer.Write(dir_final);
+            writer.Close();
+            writer.Dispose();
+            stream.Close();
+            stream.Dispose();
+
+
+
+
+        }
+
+        public void asignaMemoriaCadena(Archivo arch) { }
 
     }
 }

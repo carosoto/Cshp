@@ -65,6 +65,8 @@
     <Compile Include="ATRIBUTOS.Designer.cs">
       <DependentUpon>ATRIBUTOS.cs</DependentUpon>
     </Compile>
+    <Compile Include="Cajon.cs" />
+    <Compile Include="cubeta.cs" />
     <Compile Include="datos.cs">
       <SubType>Form</SubType>
     </Compile>

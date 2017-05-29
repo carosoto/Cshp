@@ -10,7 +10,22 @@ namespace Diccionario_de_datos
     // las cubetas almacenan el valor y la direccion
     class HASH_ESTATICA
     {
-        
+        private List<Cajon> cajon;
+
+        public HASH_ESTATICA()
+        {
+            cajon = new List<Cajon>();
+        }
+
+        public void Creacajon(Archivo arch)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                Cajon c = new Cajon();
+                c.asignaMemoriaCajon(arch);
+            }
+            cajon[0].AgregaCubetaEnteros(arch);
+        }
 
     }
 
