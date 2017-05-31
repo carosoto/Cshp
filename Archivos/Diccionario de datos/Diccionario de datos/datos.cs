@@ -29,14 +29,12 @@ namespace Diccionario_de_datos
         private List<secundaria> fk;
         private List<List<primaria>> ppk;
         private List<List<secundaria>> ffk;
-        private List<List<HASH_ESTATICA>> hhash;
-        private List<HASH_ESTATICA> hash;
         private List<Arbol> arbol;
         private Arbol arbolAux;
         private secundaria fkaux;
         private primaria pkaux;
-        private HASH_ESTATICA hashaux;
         private Atrib atributoHoja;
+        private HASH_ESTATICA hash;
         private long tam_archivoI;
         private long tam_modificar;
         private long tamañoTotal;
@@ -47,13 +45,11 @@ namespace Diccionario_de_datos
 
         public datos(List<Entidad> ent, Archivo arch)
         {
+            hash = new HASH_ESTATICA();
             hay_intermedio = false;
             atributoHoja = new Atrib();
             ppk = new List<List<primaria>>();
             ffk = new List<List<secundaria>>();
-            hhash = new List<List<HASH_ESTATICA>>();
-            hash = new List<HASH_ESTATICA>();
-            hashaux = new HASH_ESTATICA();
             arbol = new List<Arbol>();
             modifica = false;
             elimina = false;
@@ -142,8 +138,6 @@ namespace Diccionario_de_datos
             pk.Clear();
             fk.Clear();
             ffk.Clear();
-            hash.Clear();
-            hhash.Clear();
             arbol.Clear();
             int n;
             modifica = false;
@@ -182,8 +176,9 @@ namespace Diccionario_de_datos
                         }
                         if (at.GS_indice == 4)
                         {
-
+                           
                             asigna_espacionHash(at);
+                            
                         }
                         if(at.GS_indice == 5)
                         {
@@ -214,14 +209,20 @@ namespace Diccionario_de_datos
         private void button1_Click(object sender, EventArgs e)
         {
             Boolean hay_5 = false;
+            Boolean hay_4 = false;
             modifica = false;
             sin_datos();
             //acomodar al momento de agregar los registros
             foreach(Atrib at in atrib_)
             {
                 if(at.GS_indice == 5) { hay_5 = true; break; }
+              
             }
-
+            foreach (Atrib at in atrib_)
+            {
+                
+                if (at.GS_indice == 4) { hay_4 = true; break; }
+            }
             if (hay_5)
             {
                 if (hay_raiz && hay_intermedio)
@@ -266,7 +267,6 @@ namespace Diccionario_de_datos
                         direccion_intermedio = arbol[pos].GS_nodos[posNodo].GS_dirSiguiente;
 
                     }
-                    
 
                     int k = 0;
                     for (; k < arbol[buscaIntermedio(direccion_intermedio)].GS_nodos.Count; k++)
@@ -301,7 +301,7 @@ namespace Diccionario_de_datos
 
                    
 
-                    MessageBox.Show("LA HOJA TIENE " + arbol[posHoja].GS_datosPositivos() + " DATOS");
+                    
 
                     if (arbol[posHoja].GS_datosPositivos() < 4)
                     {
@@ -314,8 +314,9 @@ namespace Diccionario_de_datos
                     }
                     else
                     {
-                        MessageBox.Show("no se puede agregar dato la hoja esta llena , crea nueva hoja");
+                        
                         int valorDesbordado = arbol[posHoja].ordenaValores(dataGridView1, filas, PosColumna(), Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[PosColumna()].Value));
+                        
                         Arbol aux = new Arbol();
                         aux.AsignaMemoria(arch);
                         aux.AgregaValorNodo(arbol[posHoja].GS_nodos[2].GS_valor,arbol[posHoja].GS_nodos[2].GS_dirSiguiente);
@@ -323,20 +324,26 @@ namespace Diccionario_de_datos
                         int index = 0;
                         for (; index < filas; index++)
                         {
-                            if (valorDesbordado == Convert.ToInt32(dataGridView1.Rows[index].Cells[pos].Value)) break;
+                            if (valorDesbordado == Convert.ToInt32(dataGridView1.Rows[index].Cells[PosColumna()].Value)) break;
 
                         }
-
-                        aux.AgregaValorNodo(valorDesbordado, Convert.ToInt32(dataGridView1.Rows[index].Cells[0].Value));
+                        aux.AgregaValorNodo(valorDesbordado, Convert.ToInt64(dataGridView1.Rows[index].Cells[0].Value));
                         arbol.Add(aux);
-                        arbol[buscaIntermedio(direccion_intermedio)].AgregaValorNodo(arbol[posHoja].GS_nodos[2].GS_valor, arbol[posHoja].GS_nodos[2].GS_dirSiguiente);
+                        arbol[buscaIntermedio(direccion_intermedio)].AgregaValorNodo(arbol[posHoja].GS_nodos[2].GS_valor,aux.GS_direccion);
+                        
+                        arbol[buscaIntermedio(direccion_intermedio)].ordenaIntermedio(arbol, buscaIntermedio(direccion_intermedio));
+
+                       
+
                         arbol[posHoja].GS_nodos[2].GS_valor = -1;
                         arbol[posHoja].GS_nodos[2].GS_dirSiguiente = -1;
-                       // arbol[buscaIntermedio(direccion_intermedio)].ordenaRaiz(arbol,);
+                        arbol[posHoja].GS_nodos[3].GS_valor = -1;
+                        arbol[posHoja].GS_nodos[3].GS_dirSiguiente = -1;
 
-
+                        buscaPrimeraDirIndice(buscaIntermedio(direccion_intermedio));
+                        
                     }
-                    
+
                     EscribeHojaPrimeraVez();
                 }
 
@@ -582,6 +589,7 @@ namespace Diccionario_de_datos
                     }
                     else//hoja desbordada
                     {
+                        
                         int valorDesbordado = arbolAux.ordenaValores(dataGridView1, filas, pos, Convert.ToInt32(dataGridView1.Rows[filas - 1].Cells[pos].Value));
                         Arbol hojaSig = new Arbol();
                         Arbol raiz = new Arbol('r');
@@ -619,220 +627,39 @@ namespace Diccionario_de_datos
                 }
             }
 
+            if (hay_4){
 
-        } //grabar datos
-
-        private void buscaPrimeraDir()
-        {
-           
-            int valor = arbol[buscaRaiz()].GS_nodos[0].GS_valor;
-            long dir;
-            foreach(Arbol a in arbol)
-            {
-                if(a.GS_tipo != 'r')
-                {
-                    for(int i = 0; i < a.GS_nodos.Count; i++)
-                    {
-                        if(a.GS_nodos[i].GS_valor < valor && a.GS_nodos[i].GS_valor != -1)
-                        {
-                            dir = a.GS_direccion;
-                            arbol[buscaRaiz()].GS_nodos[0].GS_dirSiguiente = dir;
-                            break;
-                        }
-                    }
-
-                }
-            }
-
-        }
-        private void buscaValorHojaM()
-        {
-            int indice = buscaRaiz();
-            int valor = 0;
-            
-                for(int i = 0; i < arbol[indice].GS_nodos.Count; i++) { 
-                if (arbol[indice].GS_nodos[i].GS_valor != -1)
-                {
-                    valor = arbol[indice].GS_nodos[i].GS_valor;
-
-                    foreach (Arbol a in arbol) {
-
-                        if (a.GS_tipo != 'r') {
-                            foreach (Nodo n1 in a.GS_nodos)
-                            {
-                                if (n1.GS_valor == valor)
-                                {
-                                    
-                                    arbol[indice].GS_nodos[i].GS_dirDerecha = a.GS_direccion;
-                                    
-
-                                    
-                                }
-
-                            }
-                        }
-
-
-                    }
-                    
-                }
-
-               
+                hash.agregaValorEntero(Convert.ToInt32(dataGridView1.Rows[filas-1].Cells[posHash()].Value), 
+                                       Convert.ToInt64( dataGridView1.Rows[filas-1].Cells[0].Value), arch);
                 
+
+
+            }
+        } //grabar datos
+        
+        private int posHash()
+        {
+            int j = 0;
+            String nombre = "";
+            foreach (Atrib a in atrib_)
+            {
+                if (a.GS_indice == 4)
+                {
+                    nombre = new string(a.GS_nombre);
+                    break;
+                }
+
             }
 
-
-
-        }
-        private int buscaHoja(long direccion)
-        {
-            int i = 0;
-            for (; i < arbol.Count; i++)
+            for (; j < dataGridView1.ColumnCount; j++)
             {
-                if (arbol[i].GS_tipo == 'h')
+                if (dataGridView1.Columns[j].Name == nombre)
                 {
-                    if(arbol[i].GS_direccion == direccion)
+                    j = dataGridView1.Columns[j].Index;
                     break;
                 }
             }
-            return i;
-        }
-        private int buscaRaiz()
-        {
-            int i = 0;
-           for(; i < arbol.Count; i++)
-            {
-                if (arbol[i].GS_tipo == 'r') break;
-            }
-            return i;
-
-        }
-        private int buscaIntermedio(long direccion)
-        {
-            int i = 0;
-            for (; i < arbol.Count; i++)
-            {
-                if (arbol[i].GS_tipo == 'i')
-                {
-                    if (arbol[i].GS_direccion == direccion)
-                        break;
-                }
-            }
-            return i;
-        }
-        private int buscaIntermedio()
-        {
-            int i = 0;
-            for (; i < arbol.Count; i++)
-            {
-                if (arbol[i].GS_tipo == 'r') break;
-            }
-            return i;
-        }
-        private void sin_datos()
-        {
-
-            datas.Clear();
-            datas_leidas.Clear();
-            //primero escribir la direccion inicial 
-            FileStream stream;
-            BinaryWriter writer;
-            tam_archivoI = arch.Tam_archivo(); // tamaño inicial del archivo
-            datas.Add(tam_archivoI.ToString()); // agregamos el tamaño inicial del archivo
-            tamaño_dato += 8;
-            stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-            writer = new BinaryWriter(stream);
-            stream.Seek(tam_archivoI, SeekOrigin.Begin);
-            writer.Write(tam_archivoI); // escribimos tamaño inicial del archivo
-            writer.Close();
-            writer.Dispose();
-            stream.Close();
-            stream.Dispose();
-            foreach (Atrib a in atrib_)
-            {
-                long ult_posicion = arch.Tam_archivo();
-
-                if (a.GS_tipo == 'I' || a.GS_tipo == 'i')
-                {
-                    long num = 0;
-                    String clave = Interaction.InputBox("DAME VALOR NUMERICO PARA : ->  " + new String(a.GS_nombre), "ADQUISICION DE DATOS");
-                    datas.Add(clave);
-                    if (clave != "")
-                    {
-                        num = Convert.ToInt64(clave);
-
-                        stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-                        writer = new BinaryWriter(stream);
-                        stream.Seek(ult_posicion, SeekOrigin.Begin);
-                        writer.Write(num);
-                        writer.Close();
-                        writer.Dispose();
-                        stream.Close();
-                        stream.Dispose();
-                        tamaño_dato += 8;
-
-                    }
-                    else MessageBox.Show("NO SE PUSO NINGUN VALOR NUMERICO SE PONDRA 0 POR DEFAULT");
-
-                }
-                else
-                {
-
-                    String nombre = Interaction.InputBox("DAME VALOR PARA : ->  " + new String(a.GS_nombre), "ADQUISICION DE DATOS");
-
-                    datas.Add(nombre);
-                    stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-                    writer = new BinaryWriter(stream);
-                    stream.Seek(ult_posicion, SeekOrigin.Begin);
-                    writer.Write(convierteNombre(nombre));
-                    writer.Close();
-                    writer.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-
-
-                }
-
-            }
-
-
-            long ult_pos = arch.Tam_archivo();
-
-            long ult_dir = -1;
-            tamaño_dato += 8;
-
-            stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-            writer = new BinaryWriter(stream);
-            stream.Seek(ult_pos, SeekOrigin.Begin);
-            writer.Write(ult_dir);
-            writer.Close();
-            writer.Dispose();
-            stream.Close();
-            stream.Dispose();
-            datas.Add(ult_dir.ToString());
-            if (filas <= 0)
-            {
-                entidad.GS_Dir_datos = tam_archivoI;
-                arch.Modifica_entidad(entidad.GS_Dir_entidad, entidad);
-
-            }
-            else
-            {
-
-                long dir_principal = Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value);
-                long dir_sig = tam_archivoI;
-
-                modifica_datos(dir_principal, tam_modificar, dir_sig);
-                ult_dir = dir_sig;
-
-
-                dataGridView1.Rows[filas - 1].Cells[dataGridView1.ColumnCount - 1].Value = dir_sig;
-            }
-
-            Agregadatos();
-
-            tamaño_dato = 0;
-
+            return j;
         }
 
         private void Agregadatos()
@@ -1053,12 +880,13 @@ namespace Diccionario_de_datos
             pk.Clear();
             ffk.Clear();
             fk.Clear();
+            
+            //descomentar esto
             arbol.Clear();
             foreach (Atrib a in atrib_)
             {
                 if (new string(a.GS_nombre) == comboBox2.SelectedItem.ToString())
                 {
-
                     aux = a;
                     break;
                 }
@@ -1569,9 +1397,59 @@ namespace Diccionario_de_datos
 
             }
 
-            if(aux.GS_indice == 5)
+            if(aux.GS_indice == 4)
             {
                 
+                leer_hash();    
+                hash.reiniciaValores();
+                hash.AgregaValores(dataGridView1,filas,posHash(),arch);
+                dataGridView2.Rows.Clear();
+                dataGridView3.Rows.Clear();
+                dataGridView3.ColumnCount = 5;
+                dataGridView2.ColumnCount = 3;
+                dataGridView2.Columns[0].Name = "DIR";
+                dataGridView2.Columns[1].Name = "DIR CUBETA";
+                dataGridView2.Columns[2].Name = "DIR SIG";
+                dataGridView3.Columns[0].Name = "DIR";
+                dataGridView3.Columns[1].Name = "VALOR";
+                dataGridView3.Columns[2].Name = "DIR VALOR";
+                dataGridView3.Columns[3].Name = "DIR SIG CUBETA";
+                dataGridView3.Columns[4].Name = "DIR SIG";
+
+                foreach (Cajon c in hash.GS_CAJON)
+                {
+                   
+                    dataGridView2.Rows.Add(c.GS_dirInicial, c.GS_dirCubeta, c.GS_dirFinal);
+                }
+                int f = 0;
+                hash.GS_CAJON[0].GS_color = Color.Red;
+                hash.GS_CAJON[1].GS_color = Color.Green;
+                hash.GS_CAJON[2].GS_color = Color.Blue;
+                foreach (Cajon c in hash.GS_CAJON)
+                {
+                    
+                    foreach (cubeta cu in c.GS_cubeta)
+                    {
+                        dataGridView3.Rows.Add(cu.GS_dirInicial,cu.GS_valor,cu.GS_dirvalor,cu.GS_dirSigCubeta,cu.GS_dirFinal);
+                        dataGridView3.Rows[f].Cells[0].Style.BackColor = c.GS_color;
+                        dataGridView3.Rows[f].Cells[1].Style.BackColor = c.GS_color;
+                        dataGridView3.Rows[f].Cells[2].Style.BackColor = c.GS_color;
+                        dataGridView3.Rows[f].Cells[3].Style.BackColor = c.GS_color;
+                        dataGridView3.Rows[f++].Cells[4].Style.BackColor = c.GS_color;
+
+                        cu.modificaValores(arch);
+                        c.modificaCajon(arch);
+                    }
+                }
+
+              
+            
+
+            }
+
+            if(aux.GS_indice == 5)
+            {
+                // se comento esto
                 dataGridView2.Rows.Clear();
                 dataGridView2.ColumnCount = 11;
                 dataGridView2.Columns[0].Name = "DIR";
@@ -1796,7 +1674,12 @@ namespace Diccionario_de_datos
 
         private void asigna_espacionHash(Atrib at)
         {
-           
+            hash.Creacajon(arch);
+            Atrib aux = new Atrib();
+            aux = at;
+            aux.GS_dir_indice = hash.direccionInicial();
+            long new_dir = aux.GS_dir_atributo;
+            arch.Modifica_atributo(new_dir, aux);
         }
 
         private void asigna_espacioArbol(Atrib at,Boolean change,long dir)
@@ -2014,64 +1897,7 @@ namespace Diccionario_de_datos
             elimina = false;
         }
        
-        private void con_datos(long primera_dir)
-        {
-            Entidad aux = new Entidad();
-            aux = entidad;
-            long d = aux.GS_Dir_entidad;
-            aux.GS_Dir_datos = primera_dir;
-            arch.Modifica_entidad(d,aux);
-            
-            int i = 0;
-            Boolean activa = false;
-            long dir = Convert.ToInt64(dataGridView2.Rows[0].Cells[i].Value);
-            for (int j = 0; j < filas; j++)
-            {
-                i = 0;
-               
-                activa = true;
-                for (; i < dataGridView1.ColumnCount; i++)
-                {
-                    FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
-                    BinaryWriter writer = new BinaryWriter(stream);
-                    stream.Seek(dir, SeekOrigin.Begin);
-                    if (i == 0)
-                    {
-                        writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value));
-                        dir += 8;
-
-                    }
-                    if (activa)
-                    {
-                        for (int k = 1; k < dataGridView2.ColumnCount - 1; k++)
-                        {
-                            if (atrib_[k - 1].GS_tipo == 'I')
-                            {
-                                writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[k].Value));
-                                dir += 8;
-                            }
-                            else
-                            {
-                                writer.Write(convierteNombre(dataGridView2.Rows[j].Cells[k].Value.ToString()));
-                                dir += 30;
-                            }
-
-                        }
-                        activa = false;
-                    }
-                    if (i == dataGridView2.ColumnCount - 1)
-                    {
-                        writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value));
-                        dir = Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value);
-                    }
-                    writer.Close();
-                    writer.Dispose();
-                    stream.Close();
-                    stream.Dispose();
-                }
-            }
-
-        }
+      
 
         private void leerRaiz()
         {
@@ -2257,5 +2083,431 @@ namespace Diccionario_de_datos
             return j;
         }
        
+        private Boolean buscaValorrepetido(int valor)
+        {
+            for(int i = 0; i < filas; i++)
+            {
+                if(valor == Convert.ToInt32(dataGridView1.Rows[filas].Cells[PosColumna()].Value)){
+                    MessageBox.Show("dato repetido no se puede agregar");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void buscaPrimeraDir()
+        {
+
+            int valor = arbol[buscaRaiz()].GS_nodos[0].GS_valor;
+            long dir;
+            foreach (Arbol a in arbol)
+            {
+                if (a.GS_tipo != 'r')
+                {
+                    for (int i = 0; i < a.GS_nodos.Count; i++)
+                    {
+                        if (a.GS_nodos[i].GS_valor < valor && a.GS_nodos[i].GS_valor != -1)
+                        {
+                            dir = a.GS_direccion;
+                            arbol[buscaRaiz()].GS_nodos[0].GS_dirSiguiente = dir;
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        private void buscaPrimeraDirIndice(int intermedio)
+        {
+            List<int> v = new List<int>();
+            for (int i = 0; i < 4; i++)
+            {
+                if (arbol[intermedio].GS_nodos[i].GS_valor != -1)
+                    v.Add(arbol[intermedio].GS_nodos[i].GS_valor);
+            }
+            v.Sort();
+            int valor = v[0];
+            int index = 0;
+            for (; index < arbol[intermedio].GS_nodos.Count; index++)
+            {
+                if (arbol[intermedio].GS_nodos[index].GS_valor == valor) break;
+            }
+
+            long dir;
+            foreach (Arbol a in arbol)
+            {
+                if (a.GS_tipo != 'i' && a.GS_tipo != 'r')
+                {
+                    for (int i = 0; i < a.GS_nodos.Count; i++)
+                    {
+                        if (a.GS_nodos[i].GS_valor < valor && a.GS_nodos[i].GS_valor != -1)
+                        {
+                            dir = a.GS_direccion;
+                            arbol[intermedio].GS_nodos[index].GS_dirSiguiente = dir;
+
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        private void buscaValorHojaM()
+        {
+            int indice = buscaRaiz();
+            int valor = 0;
+
+            for (int i = 0; i < arbol[indice].GS_nodos.Count; i++)
+            {
+                if (arbol[indice].GS_nodos[i].GS_valor != -1)
+                {
+                    valor = arbol[indice].GS_nodos[i].GS_valor;
+
+                    foreach (Arbol a in arbol)
+                    {
+
+                        if (a.GS_tipo != 'r')
+                        {
+                            foreach (Nodo n1 in a.GS_nodos)
+                            {
+                                if (n1.GS_valor == valor)
+                                {
+
+                                    arbol[indice].GS_nodos[i].GS_dirDerecha = a.GS_direccion;
+
+
+
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                }
+
+
+
+            }
+
+
+
+        }
+        private int buscaHoja(long direccion)
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'h')
+                {
+                    if (arbol[i].GS_direccion == direccion)
+                        break;
+                }
+            }
+            return i;
+        }
+        private int buscaRaiz()
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'r') break;
+            }
+            return i;
+
+        }
+        private int buscaIntermedio(long direccion)
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'i')
+                {
+                    if (arbol[i].GS_direccion == direccion)
+                        break;
+                }
+            }
+            return i;
+        }
+        private int buscaIntermedio()
+        {
+            int i = 0;
+            for (; i < arbol.Count; i++)
+            {
+                if (arbol[i].GS_tipo == 'r') break;
+            }
+            return i;
+        }
+        private void sin_datos()
+        {
+
+
+            int pos_col = 1;
+            datas.Clear();
+            datas_leidas.Clear();
+            //primero escribir la direccion inicial 
+            FileStream stream;
+            BinaryWriter writer;
+            tam_archivoI = arch.Tam_archivo(); // tamaño inicial del archivo
+            datas.Add(tam_archivoI.ToString()); // agregamos el tamaño inicial del archivo
+            tamaño_dato += 8;
+            stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+            writer = new BinaryWriter(stream);
+            stream.Seek(tam_archivoI, SeekOrigin.Begin);
+            writer.Write(tam_archivoI); // escribimos tamaño inicial del archivo
+            writer.Close();
+            writer.Dispose();
+            stream.Close();
+            stream.Dispose();
+            foreach (Atrib a in atrib_)
+            {
+                long ult_posicion = arch.Tam_archivo();
+
+                if (a.GS_tipo == 'I' || a.GS_tipo == 'i')
+                {
+                    long num = 0;
+                    String clave = "";
+                    do
+                    {
+                        clave = Interaction.InputBox("DAME VALOR NUMERICO PARA : ->  " + new String(a.GS_nombre), "ADQUISICION DE DATOS");
+                    } while (existeValor(clave,pos_col));
+                    datas.Add(clave);
+                    if (clave != "")
+                    {
+                        num = Convert.ToInt64(clave);
+
+                        stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                        writer = new BinaryWriter(stream);
+                        stream.Seek(ult_posicion, SeekOrigin.Begin);
+                        writer.Write(num);
+                        writer.Close();
+                        writer.Dispose();
+                        stream.Close();
+                        stream.Dispose();
+                        tamaño_dato += 8;
+
+                    }
+                    else MessageBox.Show("NO SE PUSO NINGUN VALOR NUMERICO SE PONDRA 0 POR DEFAULT");
+
+                }
+                else
+                {
+
+                    String nombre = Interaction.InputBox("DAME VALOR PARA : ->  " + new String(a.GS_nombre), "ADQUISICION DE DATOS");
+
+                    datas.Add(nombre);
+                    stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                    writer = new BinaryWriter(stream);
+                    stream.Seek(ult_posicion, SeekOrigin.Begin);
+                    writer.Write(convierteNombre(nombre));
+                    writer.Close();
+                    writer.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+
+
+                }
+                pos_col++;
+
+            }
+
+
+            long ult_pos = arch.Tam_archivo();
+
+            long ult_dir = -1;
+            tamaño_dato += 8;
+
+            stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+            writer = new BinaryWriter(stream);
+            stream.Seek(ult_pos, SeekOrigin.Begin);
+            writer.Write(ult_dir);
+            writer.Close();
+            writer.Dispose();
+            stream.Close();
+            stream.Dispose();
+            datas.Add(ult_dir.ToString());
+            if (filas <= 0)
+            {
+                entidad.GS_Dir_datos = tam_archivoI;
+                arch.Modifica_entidad(entidad.GS_Dir_entidad, entidad);
+
+            }
+            else
+            {
+
+                long dir_principal = Convert.ToInt64(dataGridView1.Rows[filas - 1].Cells[0].Value);
+                long dir_sig = tam_archivoI;
+
+                modifica_datos(dir_principal, tam_modificar, dir_sig);
+                ult_dir = dir_sig;
+
+
+                dataGridView1.Rows[filas - 1].Cells[dataGridView1.ColumnCount - 1].Value = dir_sig;
+            }
+
+            Agregadatos();
+
+            tamaño_dato = 0;
+
+        }
+        private void con_datos(long primera_dir)
+        {
+            Entidad aux = new Entidad();
+            aux = entidad;
+            long d = aux.GS_Dir_entidad;
+            aux.GS_Dir_datos = primera_dir;
+            arch.Modifica_entidad(d, aux);
+
+            int i = 0;
+            Boolean activa = false;
+            long dir = Convert.ToInt64(dataGridView2.Rows[0].Cells[i].Value);
+            for (int j = 0; j < filas; j++)
+            {
+                i = 0;
+
+                activa = true;
+                for (; i < dataGridView1.ColumnCount; i++)
+                {
+                    FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                    BinaryWriter writer = new BinaryWriter(stream);
+                    stream.Seek(dir, SeekOrigin.Begin);
+                    if (i == 0)
+                    {
+                        writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value));
+                        dir += 8;
+
+                    }
+                    if (activa)
+                    {
+                        for (int k = 1; k < dataGridView2.ColumnCount - 1; k++)
+                        {
+                            if (atrib_[k - 1].GS_tipo == 'I')
+                            {
+                                writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[k].Value));
+                                dir += 8;
+                            }
+                            else
+                            {
+                                writer.Write(convierteNombre(dataGridView2.Rows[j].Cells[k].Value.ToString()));
+                                dir += 30;
+                            }
+
+                        }
+                        activa = false;
+                    }
+                    if (i == dataGridView2.ColumnCount - 1)
+                    {
+                        writer.Write(Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value));
+                        dir = Convert.ToInt64(dataGridView2.Rows[j].Cells[i].Value);
+                    }
+                    writer.Close();
+                    writer.Dispose();
+                    stream.Close();
+                    stream.Dispose();
+                }
+            }
+
+        }
+        private void leer_hash()
+        {
+            //primero hay que leer el cajon
+            hash.GS_CAJON.Clear();
+            for(int i = 0; i < 3; i++)
+            {
+                hash.GS_CAJON.Add(new Cajon());
+            }
+
+
+            Atrib aux = new Atrib();
+            
+            foreach (Atrib aa in atrib_)
+            {
+                if (new string(aa.GS_nombre) == comboBox2.SelectedItem.ToString())
+                {
+                    aux = aa;
+                    break;
+                }
+
+            }
+            long direccion_inicial = aux.GS_dir_indice;
+            Stream s = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Read);
+            BinaryReader r = new BinaryReader(s);
+            s.Seek(direccion_inicial, SeekOrigin.Begin);
+            for (int i = 0; i < 3; i++)
+            {
+                hash.GS_CAJON[i].GS_dirInicial = r.ReadInt64();
+                hash.GS_CAJON[i].GS_dirCubeta = r.ReadInt64();
+                hash.GS_CAJON[i].GS_dirFinal = r.ReadInt64();
+                if (hash.GS_CAJON[i].GS_dirCubeta != -1)
+                    hash.GS_CAJON[i].GS_cubeta.Add(new cubeta());
+
+            }
+            s.Dispose();
+            s.Close();
+
+           for(int i = 0; i < hash.GS_CAJON.Count; i++) {
+               
+                   if (hash.GS_CAJON[i].GS_dirCubeta != -1)
+                    {
+                        leerCubeta(hash.GS_CAJON[i].GS_dirCubeta, i);
+                       
+                    }
+                
+            }
+
+
+        }
+
+        private void leerCubeta(long dir,int pos)
+        {
+            long direccion_inicial = dir;
+            Stream s = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Read);
+            BinaryReader r = new BinaryReader(s);
+            s.Seek(direccion_inicial, SeekOrigin.Begin);
+            int c = 0;
+            while(direccion_inicial != -1){
+                s.Seek(direccion_inicial, SeekOrigin.Begin);
+                cubeta cubaux = new cubeta();
+                cubaux.GS_dirInicial = r.ReadInt64();
+                cubaux.GS_dirvalor = r.ReadInt64();
+                cubaux.GS_valor = r.ReadInt32();
+                cubaux.GS_dirSigCubeta = r.ReadInt64();
+                cubaux.GS_dirFinal = r.ReadInt64();
+                if (cubaux.GS_dirSigCubeta == -1) { direccion_inicial = cubaux.GS_dirFinal; hash.GS_CAJON[pos].GS_cubeta.Add(new cubeta()); }
+                else { direccion_inicial = cubaux.GS_dirSigCubeta; hash.GS_CAJON[pos].GS_cubeta.Add(new cubeta()); }
+                hash.GS_CAJON[pos].GS_cubeta[c++] = cubaux;
+                
+                
+            }
+            s.Dispose();
+            s.Close();
+            r.Dispose();
+            r.Close();
+            hash.GS_CAJON[pos].GS_cubeta.RemoveAt(c);
+
+        }
+
+        
+        private Boolean existeValor(String valor, int posCol)
+        {
+          
+            for(int i = 0; i < filas; i++)
+            {
+                if (dataGridView1.Rows[i].Cells[posCol].Value.ToString() == valor) { MessageBox.Show("EL VALOR " + valor + " YA EXISTE INGRESA OTRO NUEVO"); return true; }
+            }
+            return false;
+
+
+        }
+
+
+
+
+
+
+
     }
 }

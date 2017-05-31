@@ -129,7 +129,7 @@ namespace Diccionario_de_datos
             index_entidad = Entidad.Items.IndexOf(Entidad.SelectedItem);
             leerArchivo();
             Grabar.Enabled = true;
-          //  borrarDatos();
+            borrarDatos();
         }
 
         private void leerArchivo()

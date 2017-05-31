@@ -301,6 +301,7 @@ namespace Diccionario_de_datos
 
         }
 
+
         private void ReacomodaValores()
         {
             List<Nodo> aux = new List<Nodo>();
@@ -366,6 +367,80 @@ namespace Diccionario_de_datos
         public long GS_tamHoja
         {
             get { return tamaño_hoja; }
+        }
+
+        public void ordenaIntermedio(List<Arbol> arbol , int posIntermedio)
+        {
+            List<int> valores = new List<int>();
+            //obtengo los valores de los nodos
+          
+            foreach (Nodo n in arbol[posIntermedio].GS_nodos)
+
+            {
+                if(n.GS_valor != -1)
+                valores.Add(n.GS_valor);
+
+            }
+            //ordenamos los valores de los nodos 
+            valores.Sort();
+            nodo.Clear();
+            for(int i = 0; i < 4; i++)
+            {
+
+                nodo.Add(new Nodo());
+            }
+            //reordenar los valores
+
+            for(int i = 0; i < valores.Count; i++)
+            {
+                nodo[i].GS_valor = valores[i];
+            }
+
+
+
+
+            //buscar la direccion siguiente en la tabla
+
+            for (int j = 0; j < arbol[posIntermedio].GS_nodos.Count; j++)
+
+            {
+                if (arbol[posIntermedio].GS_nodos[j].GS_valor != -1)
+                {
+                    for (int i = 0; i < arbol.Count; i++)
+                    {
+
+                        if (arbol[i].GS_tipo != 'r' && arbol[i].GS_tipo != 'i')
+                        {
+
+                            for (int k = 0; k < arbol[i].GS_nodos.Count; k++)
+                            {
+                                if (arbol[posIntermedio].GS_nodos[j].GS_valor != -1 && arbol[posIntermedio].GS_nodos[j].GS_valor == arbol[i].GS_nodos[k].GS_valor)
+                                {
+                                    if (j < 3)
+                                    {
+                                        arbol[posIntermedio].GS_nodos[j + 1].GS_dirSiguiente = arbol[i].GS_direccion;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        arbol[posIntermedio].GS_nodos[j].GS_dirSiguiente = arbol[i].GS_direccion;
+                                        break;
+                                    }
+
+
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+
+
+
+
         }
 
         public void AsignaMemoria(Archivo arch)

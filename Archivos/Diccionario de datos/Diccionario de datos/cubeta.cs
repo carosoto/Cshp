@@ -18,7 +18,7 @@ namespace Diccionario_de_datos
         private long dir_sig_cubeta;
         private int valor_entero;
         private string valor_cadena;
-        
+       
 
         public cubeta()
         {
@@ -28,7 +28,10 @@ namespace Diccionario_de_datos
             dir_valor = -1;
             valor_entero = -1;
             valor_cadena = "null";
+           
         }
+
+       
 
         public long GS_dirSigCubeta
         {
@@ -74,18 +77,37 @@ namespace Diccionario_de_datos
             writer.Write(GS_dirInicial);
             writer.Write(dir_valor);
             writer.Write(valor_entero);
-            if (posCubeta == 2) writer.Write(dir_sig_cubeta); // escribe solamente en la 3a cubeta
+            writer.Write(dir_sig_cubeta); // escribe solamente en la 3a cubeta
+            if (posCubeta < 2) dir_final = dir_inicial + 36;
+            
+
+                writer.Write(dir_final);
+            
+            writer.Close();
+            writer.Dispose();
+            stream.Close();
+            stream.Dispose();
+            
+        }
+        
+        public void modificaValores(Archivo arch)
+        {
+            long dir_inicial = 0;
+            dir_inicial = GS_dirInicial;
+            FileStream stream = new FileStream(arch.GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+            BinaryWriter writer = new BinaryWriter(stream);
+            stream.Seek(dir_inicial, SeekOrigin.Begin);
+            writer.Write(GS_dirInicial);
+            writer.Write(dir_valor);
+            writer.Write(valor_entero);
+            writer.Write(dir_sig_cubeta); // escribe solamente en la 3a cubeta
             writer.Write(dir_final);
             writer.Close();
             writer.Dispose();
             stream.Close();
             stream.Dispose();
-
-
-
-
         }
-
+        
         public void asignaMemoriaCadena(Archivo arch) { }
 
     }
