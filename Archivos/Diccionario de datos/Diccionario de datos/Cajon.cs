@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+░▐█▀▀▒▐█▀█▒▄█▀▀█░▐██▒██░░░▒▐█▀▀█▌▒██▄░▒█▌
+░▐█▀▀▒▐█▄█▒▀▀█▄▄─░█▌▒██░░░▒▐█▄▒█▌▒▐█▒█▒█░
+░▐█▄▄▒▐█░░▒█▄▄█▀░▐██▒██▄▄█▒▐██▄█▌▒██░▒██▌
+Autor: Aarón Miranda Victorino
+Proyecto : Diccionario de datos
+Materia: Estructura de archivos
+Correo: epsilon11101@gmail.com
+Clase: Cajon
+*/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,15 +18,17 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace Diccionario_de_datos
 {
-    //agregar metodo para asignar memoria
+    
     class Cajon
     {
+        //variabes de instancia
         private long  dir_inicial;
         private long dir_final;
         private long direccion_cubeta;
         private List<cubeta> Cubeta;
         private Color c;
         
+        //constructor
         public Cajon()
         {
             dir_inicial = dir_final = direccion_cubeta = -1;
@@ -23,11 +36,13 @@ namespace Diccionario_de_datos
             c = Color.Black;
 
         }
+        //color para modificar las celdas de su datagridview
         public Color GS_color
         {
             get { return c; }
             set { c = value; }
         }
+        //agrega cubeta de valores enteros
         public void AgregaCubetaEnteros(Archivo arch)
         {
             for(int i = 0; i < 3; i++)
@@ -39,7 +54,7 @@ namespace Diccionario_de_datos
 
             GS_dirCubeta = Cubeta[0].GS_dirInicial;
         }
-
+        //crear una nueva cubeta
         public void AgregaCubetaDesbordada(Archivo arch)
         {
             for (int i = 0; i < 3; i++)
@@ -51,7 +66,7 @@ namespace Diccionario_de_datos
 
             Cubeta[2].GS_dirSigCubeta = Cubeta[3].GS_dirInicial;
         }
-
+        //Asignar memoria a un cajon en el archivo
         public void asignaMemoriaCajon(Archivo arch, int i)
         {
             long dir_inicial = 0;
@@ -71,31 +86,31 @@ namespace Diccionario_de_datos
             stream.Dispose();
             
         }
-
+        //obtener las cubetas  creadas
         public List<cubeta> GS_cubeta
         {
             get { return Cubeta; }
             set { Cubeta = value; }
         }
-
+        //obtener direccion de la cubeta
         public long GS_dirCubeta
         {
             get { return direccion_cubeta; }
             set { direccion_cubeta = value; }
         }
-
+        //obtener la direccion final
         public long GS_dirFinal
         {
             get { return dir_final; }
             set { dir_final = value; }
         }
-
+        //obtener la direccion inicial
         public long GS_dirInicial
         {
             get { return dir_inicial; }
             set { dir_inicial = value; }
         }
-
+        //obtener la cantidad de valores que tiene cada registro de la cubeta
         public int GS_CantidadValores()
         {
             int total = 0;
@@ -109,7 +124,7 @@ namespace Diccionario_de_datos
             }
             return total;
         }
-        
+        //modificar cajon 
         public void modificaCajon(Archivo arch)
         {
             long dir_inicial = 0;

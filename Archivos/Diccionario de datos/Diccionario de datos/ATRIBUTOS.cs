@@ -23,11 +23,13 @@ namespace Diccionario_de_datos
 {
     public partial class ATRIBUTOS : DevComponents.DotNetBar.Metro.MetroForm
     {
+        //Variables de instancia
         private List<Entidad> ent_;
         private List<Atrib> atrib_;
         private Archivo arch;
         private char type;
         private int index_entidad, index_atributo;
+        //constructor
         public ATRIBUTOS(List<Entidad> ent, Archivo arch)
         {
             ent_ = new List<Entidad>();
@@ -37,31 +39,33 @@ namespace Diccionario_de_datos
             ent_ = ent;
             index_entidad = index_atributo = 0;
             InitializeComponent();
-            foreach (Entidad e in ent_) {
+            foreach (Entidad e in ent_)
+            {
                 Entidad.Items.Add(new String(e.GS_NombreEntidad));
 
             }
             Entidad.Enabled = true;
         }
-
+        //grabar los datos de una fila seleccionada en los textbox
         private void Tipo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Tipo.Text == "INT") { type = 'I'; Longitud.Text = "4"; }
             else if (Tipo.Text == "CHAR") { type = 'C'; Longitud.Text = ""; }
         }
-
+        //boton para almacenar atributo en el archivo
         private void Grabar_Click(object sender, EventArgs e)
         {
-            
+
             Modificar.Enabled = true;
             Eliminar.Enabled = true;
 
             Atrib a = new Atrib();
-            if (Nombre.Text != "" && Tipo.Text != "" && Longitud.Text != "" && Clave.Text != "") {
+            if (Nombre.Text != "" && Tipo.Text != "" && Longitud.Text != "" && Clave.Text != "")
+            {
 
                 if (!busca_Repetidos(Nombre.Text))
                 {
-                   
+
                     a.GS_nombre = convierteNombre(Nombre.Text);
                     a.GS_tipo = type;
                     a.GS_longitud = Convert.ToInt16(Longitud.Text);
@@ -90,17 +94,18 @@ namespace Diccionario_de_datos
             }
 
         }
-    
+        //acomodar direcciones en los atributs
         private void acomodaDirecciones()
         {
-            if (ent_[index_entidad].GS_atrib.Count > 1) {
+            if (ent_[index_entidad].GS_atrib.Count > 1)
+            {
                 for (int i = 0; i < ent_[index_entidad].GS_atrib.Count - 1; i++)
                 {
                     ent_[index_entidad].GS_atrib[i].GS_dir_sig_atrib = ent_[index_entidad].GS_atrib[i + 1].GS_dir_atributo;
                 }
                 ent_[index_entidad].GS_atrib[ent_[index_entidad].GS_atrib.Count - 1].GS_dir_sig_atrib = -1; //ultimo atrib
 
-                for (int i = 0; i < ent_[index_entidad].GS_atrib.Count ; i++)
+                for (int i = 0; i < ent_[index_entidad].GS_atrib.Count; i++)
                 {
                     arch.Modifica_atributo(ent_[index_entidad].GS_atrib[i].GS_dir_atributo, ent_[index_entidad].GS_atrib[i]);
                 }
@@ -109,7 +114,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //convierte un string a un arreglo de char
         private char[] convierteNombre(String texto)
         {
             char[] c = new char[30];
@@ -123,7 +128,7 @@ namespace Diccionario_de_datos
             return c;
 
         }//convertir Nombre
-
+        //verificar que fila cambio para modificar el valor
         private void Entidad_SelectedIndexChanged(object sender, EventArgs e)
         {
             index_entidad = Entidad.Items.IndexOf(Entidad.SelectedItem);
@@ -131,7 +136,7 @@ namespace Diccionario_de_datos
             Grabar.Enabled = true;
             borrarDatos();
         }
-
+        //lectura del archivo
         private void leerArchivo()
         {
 
@@ -169,19 +174,19 @@ namespace Diccionario_de_datos
             r.Dispose();
             actualizaData();
         }
-
+        //acualizar archivo
         private void actualizaData()
         {
             dataGridView1.Rows.Clear();
 
-            foreach (Atrib a in  ent_[index_entidad].GS_atrib)
+            foreach (Atrib a in ent_[index_entidad].GS_atrib)
             {
                 string nombre = new string(a.GS_nombre);
-                dataGridView1.Rows.Add(nombre,a.GS_tipo,a.GS_longitud,a.GS_dir_atributo,a.GS_indice,a.GS_dir_indice,a.GS_dir_sig_atrib);
+                dataGridView1.Rows.Add(nombre, a.GS_tipo, a.GS_longitud, a.GS_dir_atributo, a.GS_indice, a.GS_dir_indice, a.GS_dir_sig_atrib);
             }
 
         } // muestra datos en datagrid
-
+        //boton para habilitar bandera para modificar
         private void Modificar_Click(object sender, EventArgs e)
         {
 
@@ -189,14 +194,14 @@ namespace Diccionario_de_datos
             ent_[index_entidad].GS_atrib[index_atributo].GS_tipo = type;
             ent_[index_entidad].GS_atrib[index_atributo].GS_longitud = Convert.ToInt16(Longitud.Text);
             ent_[index_entidad].GS_atrib[index_atributo].GS_indice = Convert.ToInt16(Clave.SelectedItem);
-            
+
             arch.Modifica_atributo(ent_[index_entidad].GS_atrib[index_atributo].GS_dir_atributo, ent_[index_entidad].GS_atrib[index_atributo]);
             actualizaData();
             borrarDatos();
-            
-            
-        }
 
+
+        }
+        //boton para habilitar bandera de eliminar
         private void Eliminar_Click(object sender, EventArgs e)
         {
             try
@@ -254,7 +259,7 @@ namespace Diccionario_de_datos
                 MessageBox.Show("NO EXISTEN DATOS PARA MOSTRAR");
             }
         }
-
+        //boton para actualizar los datos del atributo
         private void Actualiza_Click(object sender, EventArgs e)
         {
             try
@@ -309,7 +314,7 @@ namespace Diccionario_de_datos
             }
             actualizaData();
         }
-
+        //boton para crear un nuevo atributo
         private void Nuevo_Click(object sender, EventArgs e)
         {
             Entidad.Enabled = true;
@@ -320,7 +325,7 @@ namespace Diccionario_de_datos
             Grabar.Enabled = true;
             borrarDatos();
         }
-
+        //evento para encontrar una fila especifica
         private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Nombre.Text = new string(ent_[index_entidad].GS_atrib[e.RowIndex].GS_nombre);
@@ -337,22 +342,22 @@ namespace Diccionario_de_datos
             Longitud.Enabled = true;
             Tipo.Enabled = true;
         }
-
+        //eliminar datos de una fila especifica y de un archivo
         private void borrarDatos()
         {
-         
+
             Nombre.Text = "";
             Tipo.Text = "";
             Longitud.Text = "";
             Clave.Text = "";
         }
-
+        //buscar valores repeditos 
         private Boolean busca_Repetidos(String nom)
         {
-            foreach(Atrib A in ent_[index_entidad].GS_atrib)
+            foreach (Atrib A in ent_[index_entidad].GS_atrib)
             {
                 if (String.Compare(new string(A.GS_nombre), nom) == 0) { return true; }
-               
+
             }
             return false;
         }

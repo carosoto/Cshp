@@ -27,15 +27,16 @@ namespace Diccionario_de_datos
         private FileStream stream;
         private String path;
 
-        
+        //constructor
         public Archivo() {
         }
-
+        //metodo de acceso para obtener la ruta del archivo
         public String GS_path
         {
             get { return path; }
             set { path = value; }
         }
+        //metodo para crear un nuevo archivo
         public void creaArchivo()
         {
             
@@ -57,7 +58,7 @@ namespace Diccionario_de_datos
   
        
 
-
+        //metodo para insertar atributo en el archivo
         public void insertaAtributo(Atrib a)
         {
            
@@ -77,6 +78,7 @@ namespace Diccionario_de_datos
             stream.Close();
             stream.Dispose();
         }
+        //metodo para insertar entidad en el archivo
         public void insertaListaEntidad(Entidad e)
         {
             long pos = Dame_cabezera();
@@ -108,7 +110,7 @@ namespace Diccionario_de_datos
                 return tam;
             
         }
-
+        //metodo para obtener la cabezera
         public long Dame_cabezera()
         {
             try
@@ -127,6 +129,7 @@ namespace Diccionario_de_datos
             }
             catch { MessageBox.Show("Necesitas abrir un archivo"); return -1; }
         }
+        //metodo para modificar la cabezera del afchivo
         public void Modifica_cab(long new_cabezera)
         {
             stream = new FileStream(GS_path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
@@ -138,7 +141,7 @@ namespace Diccionario_de_datos
             writer.Close();
             writer.Dispose();
         }
-        
+        //metodo para modificar entidad
         public void Modifica_entidad(long direccion, Entidad ent) {
             
             stream = new FileStream(GS_path, FileMode.Open, FileAccess.Write);
@@ -154,7 +157,7 @@ namespace Diccionario_de_datos
             stream.Close();
             stream.Dispose();
         }
-
+        //metodo para modifiar atributo
         public void Modifica_atributo(long direccion, Atrib a)
         {
             stream = new FileStream(GS_path, FileMode.Open, FileAccess.Write);

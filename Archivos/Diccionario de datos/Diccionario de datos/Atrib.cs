@@ -19,6 +19,7 @@ namespace Diccionario_de_datos
 {
    public class Atrib
     {
+        //variables de instancia
         private char[] nombre;
         private char tipo;
         private Int16 longitud;
@@ -27,12 +28,13 @@ namespace Diccionario_de_datos
         private long dir_indice;
         private long dir_sig_atrib;
         
+        //constructor
         public Atrib()
         {
 
         }
 
-
+        //metodos de acceso para modificar y obtener los datos de cada atributo
         public long GS_dir_sig_atrib
         {
             get { return dir_sig_atrib; }

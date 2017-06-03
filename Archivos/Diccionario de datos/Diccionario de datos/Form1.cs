@@ -24,11 +24,12 @@ namespace Diccionario_de_datos
 {
     public partial class Form1 : DevComponents.DotNetBar.Metro.MetroForm
     {
-
+        //variables de instancia
         private Archivo archivo;
         private List<Entidad> entidad;
         private String path;
         private int dirEntidad;
+        //constructor
         public Form1()
         {
             InitializeComponent();
@@ -38,7 +39,7 @@ namespace Diccionario_de_datos
             path = Directory.GetCurrentDirectory();
 
         }
-
+        //boton para grabar entidad
         private void Grabar_Click(object sender, EventArgs e)
         {
             
@@ -203,6 +204,7 @@ namespace Diccionario_de_datos
 
         }//boton para abrir
 
+        //boton para modificar entidad
         private void Modificar_Click(object sender, EventArgs e)
         {
 
@@ -229,7 +231,7 @@ namespace Diccionario_de_datos
             }
             EntidadText.Text = "";
         }
-
+        //boton para eliminar etidad
         private void Eliminar_Click(object sender, EventArgs e)
         {
             EntidadText.Text = "";
@@ -267,7 +269,7 @@ namespace Diccionario_de_datos
             }
             catch { MessageBox.Show("No existen mas datos"); }
         }
-
+        //boton para abrir archivo
         private void abrirToolStripMenuItem1_Click(object sender, EventArgs e)
         {
            
@@ -319,7 +321,7 @@ namespace Diccionario_de_datos
                 actualizaData();
             }
         }
-
+        //boton para crear nuevo documento
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e) // nuevo documento
         {
             if (entidad != null) entidad.Clear();
@@ -334,12 +336,12 @@ namespace Diccionario_de_datos
             sv.Dispose();
             
         }
-
+        //crear nuevo atributo
         private void atributosToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             new ATRIBUTOS(entidad,archivo).Show();
         }
-
+        //habilitar botones
 
         private void habilita(String op)
         {
@@ -368,7 +370,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //crear nueva entidad
         private void datosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new datos(entidad, archivo).Show();

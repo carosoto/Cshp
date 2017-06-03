@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+░▐█▀▀▒▐█▀█▒▄█▀▀█░▐██▒██░░░▒▐█▀▀█▌▒██▄░▒█▌
+░▐█▀▀▒▐█▄█▒▀▀█▄▄─░█▌▒██░░░▒▐█▄▒█▌▒▐█▒█▒█░
+░▐█▄▄▒▐█░░▒█▄▄█▀░▐██▒██▄▄█▒▐██▄█▌▒██░▒██▌
+Autor: Aarón Miranda Victorino
+Proyecto : Diccionario de datos
+Materia: Estructura de archivos
+Correo: epsilon11101@gmail.com
+Clase: Arbol
+*/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,15 +18,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Diccionario_de_datos
 {
+    //Clase Arbol
     class Arbol
     {
+        //direccion inicial
         private long direccion;
+        //tipo de arbol
         private char tipo;
+        //orden del arbol
         private int orden;
+        //apuntador a siguiente
         private long dir_siguiente;
+        //lista de nodos
         private List<Nodo> nodo;
+        //tamaño de hoja
         private long tamaño_hoja;
+        //contador para primer nodo
         private int cont;
+        //constructor 
         public Arbol()
         {
             cont = 0;
@@ -28,7 +48,7 @@ namespace Diccionario_de_datos
             for (int i = 0; i < 4; i++) nodo.Add(new Nodo());
 
         }
-
+        //constructor sobrecargado
         public Arbol(char tipo){
             direccion = -1;
             cont = 0;
@@ -39,6 +59,8 @@ namespace Diccionario_de_datos
             tamaño_hoja = 65;
             for (int i = 0; i < 4; i++) nodo.Add(new Nodo());
         }
+
+        //metodos de acceso get set
 
         public long GS_direccion
         {
@@ -74,6 +96,7 @@ namespace Diccionario_de_datos
             set { cont = value; }
         }
 
+        //verifiar si la raiz no tiene datos
         public int posRiazVacia()
         {
             int j = 0;
@@ -83,7 +106,7 @@ namespace Diccionario_de_datos
             }
             return -1;
         }
-        
+        //ordena los datos de menor a mayor y cambia las direcciones 
         public void ordenaRaiz( Arbol a ,long ultDir,Boolean may)
         {
             List<int> n = new List<int>();
@@ -124,7 +147,7 @@ namespace Diccionario_de_datos
            
         }
 
-
+        //ordena los datos de mayor a menor y cambia direcciones
         public void ordenaRaizMen(List<Arbol> arbol, int indice, Arbol raiz)
         {
 
@@ -188,7 +211,7 @@ namespace Diccionario_de_datos
 
             
         }
-
+        //ordena valores de hojas
        public int ordenaValores(DataGridView tabla, int filas,int pos, int valorDesbordado)
         {
             List<int> valores = new List<int>();
@@ -217,7 +240,7 @@ namespace Diccionario_de_datos
             return valores[4];
             
         }
-
+        //retorna el valor de la raiz desbordada
         public int DameValDesRaiz(int valorDesbordado)
         {
             List<int> datos = new List<int>();
@@ -235,7 +258,7 @@ namespace Diccionario_de_datos
             
 
         }
-
+        //retorna direccion mayor
         public void buscaDirMay(List<Arbol> arbol)
         {
 
@@ -271,7 +294,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //reiniciar hoja
        public void reiniciaNodo()
         {
           
@@ -281,14 +304,14 @@ namespace Diccionario_de_datos
                 nodo[0].GS_valor = -1;
             }
         }
-
+        //agrega valor a hoja
         public void AgregaValorNodo(int value,long dir , int pos)
         {
             nodo[pos].GS_dirSiguiente = dir;
             nodo[pos].GS_valor = value;
 
         }
-
+        //metodo sobrecargado
        public void AgregaValorNodo(int value,long dir)
         {
             Nodo n = new Nodo();
@@ -301,7 +324,7 @@ namespace Diccionario_de_datos
 
         }
 
-
+        //eliminar numeros negativos
         private void ReacomodaValores()
         {
             List<Nodo> aux = new List<Nodo>();
@@ -316,7 +339,7 @@ namespace Diccionario_de_datos
             nodo = aux;
 
         }
-
+        //ordena hoja
         public void ordena(DataGridView tabla,int filas , int pos)
         {
             List<int> aux = new List<int>();
@@ -351,7 +374,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //datos positivos en un nodo
         public int GS_datosPositivos()
         {
             int contador = 0;
@@ -363,12 +386,12 @@ namespace Diccionario_de_datos
             return contador;
 
         }
-
+        //tamaño de hoja
         public long GS_tamHoja
         {
             get { return tamaño_hoja; }
         }
-
+        //ordena nodo intermedio
         public void ordenaIntermedio(List<Arbol> arbol , int posIntermedio)
         {
             List<int> valores = new List<int>();
@@ -442,7 +465,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //asigna memoria en archivo
         public void AsignaMemoria(Archivo arch)
         {
            

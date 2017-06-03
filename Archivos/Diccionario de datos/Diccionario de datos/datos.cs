@@ -15,7 +15,7 @@ namespace Diccionario_de_datos
 {
     public partial class datos : Form
     {
-
+        //variables de instancia
         private List<Entidad> ent_;
         private List<Atrib> atrib_;
         private List<String> tipo_datos;
@@ -43,6 +43,7 @@ namespace Diccionario_de_datos
         private Boolean hay_intermedio;
         int filas = 0;
 
+        //constructor sobrecargado
         public datos(List<Entidad> ent, Archivo arch)
         {
             hash = new HASH_ESTATICA();
@@ -80,7 +81,9 @@ namespace Diccionario_de_datos
             hay_raiz = false;
             
         }
+        //constructor
         public datos() { }
+        //leer todos los atributos almacenados en el archivo
         public void leer_atributos()
         {
             arch.GS_path = arch.GS_path;
@@ -128,7 +131,7 @@ namespace Diccionario_de_datos
 
             tipo_datos.Add("I");
         }
-
+        //seleccion de entidad
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             hay_intermedio = hay_raiz = false;
@@ -205,7 +208,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //grabar datos
         private void button1_Click(object sender, EventArgs e)
         {
             Boolean hay_5 = false;
@@ -636,7 +639,7 @@ namespace Diccionario_de_datos
 
             }
         } //grabar datos
-        
+        //obtener la columna de datagridview donde seencuentra la hash
         private int posHash()
         {
             int j = 0;
@@ -661,7 +664,7 @@ namespace Diccionario_de_datos
             }
             return j;
         }
-
+        //agrega datos a datagridview
         private void Agregadatos()
         {
 
@@ -676,7 +679,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //convierte string a arreglo de char
         private char[] convierteNombre(String texto)
         {
             char[] c = new char[30];
@@ -690,7 +693,7 @@ namespace Diccionario_de_datos
             return c;
 
         }//convertir Nombre
-
+        //modificar los datos
         private void modifica_datos(long direccion, long tamaño, long ultima_direccion)
         {
             long dir_fin = direccion + tamaño;
@@ -706,7 +709,7 @@ namespace Diccionario_de_datos
             //   MessageBox.Show("se escribio en la direccion " + (direccion + tamaño) + " el dato " + ultima_direccion);
 
         }
-
+        //lectura de datos de un archivo
         private void leer_datos()
         {
             datas_leidas.Clear();
@@ -773,7 +776,7 @@ namespace Diccionario_de_datos
             if (cabezera != -1)
                 filas++;
         }
-
+        //boton para eliminar registro
         private void button3_Click(object sender, EventArgs e)
         {
             if (filas > 0)
@@ -784,7 +787,7 @@ namespace Diccionario_de_datos
             }
             else { elimina = false; modifica = false; MessageBox.Show("NO HAY DATOS POR ELIINAR >:( "); }
         }
-
+        //elimina la fila seleccionada 
         private void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             FileStream stream;
@@ -870,7 +873,7 @@ namespace Diccionario_de_datos
                 dataGridView1.Rows.RemoveAt(e.RowIndex);
             }
         }//eliminar
-
+        //seleccion de clave de cada de los atributos 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) //seleccionar de clave
         {
             Atrib aux = new Atrib();
@@ -1476,7 +1479,7 @@ namespace Diccionario_de_datos
             }
 
         }
-
+        //asigna espacio al archivo de secundaria
         private void asigna_espacioLlavesecundaria(Atrib at)
         {
             ffk.Clear();
@@ -1578,7 +1581,7 @@ namespace Diccionario_de_datos
 
             }
         }
-
+        //asigna espacio al archivo de llave primaria
         private void asigna_espacioLlaveprimaria(Atrib at)
         {
             ppk.Clear();
@@ -1671,7 +1674,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //asigna espacion al archivo para hash
         private void asigna_espacionHash(Atrib at)
         {
             hash.Creacajon(arch);
@@ -1681,7 +1684,7 @@ namespace Diccionario_de_datos
             long new_dir = aux.GS_dir_atributo;
             arch.Modifica_atributo(new_dir, aux);
         }
-
+        //asigna espacio al archivo para el arbol
         private void asigna_espacioArbol(Atrib at,Boolean change,long dir)
         {
             Atrib aux = new Atrib();
@@ -1702,7 +1705,7 @@ namespace Diccionario_de_datos
             if(change)
             arbol.Add(a);
         }
-
+        //lectura en el archivo de llave secundaria
         private void leer_secundaria()
         {
             Atrib aux = new Atrib();
@@ -1776,7 +1779,7 @@ namespace Diccionario_de_datos
 
             }
         }
-
+        //lectura en el archivo de llave primaria
         private void leer_primaria()
         {
 
@@ -1846,7 +1849,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //evento para modificar , detecta cuando el valor de la celda cambio
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (modifica)
@@ -1889,16 +1892,14 @@ namespace Diccionario_de_datos
             }
 
         }//modificar 
-
+        //boton que habilita banderas para modificar registro
         private void button2_Click(object sender, EventArgs e)
         {
             MessageBox.Show("SELECCIONE LA CELDA QUE DESEA MODIFICAR ;)");
             modifica = true;
             elimina = false;
         }
-       
-      
-
+       //lectura de la raiz de un arbol
         private void leerRaiz()
         {
             Atrib aux = new Atrib();
@@ -1954,7 +1955,7 @@ namespace Diccionario_de_datos
 
 
             }
-        
+        //lectura del nodo intermedio de un arbol
         private void leerIntermedio()
         {
            for(int i = 0; i < arbol.Count; i++)
@@ -1975,6 +1976,7 @@ namespace Diccionario_de_datos
                 }
             }
         }
+        //lectura de un nodo hoja de un arbol
         private void leerHoja(long dir,bool activa)
         {
 
@@ -2033,7 +2035,7 @@ namespace Diccionario_de_datos
             }
 
         }
-        
+        //Escribir en el archivo los valores de la hoja
         private void EscribeHojaPrimeraVez()
         {
             foreach (Arbol a in arbol)
@@ -2057,7 +2059,7 @@ namespace Diccionario_de_datos
 
             }
         }
-
+        //obtener la posicion de la columna para arbol
         private int PosColumna()
         {
             int j = 0;
@@ -2082,7 +2084,7 @@ namespace Diccionario_de_datos
             }
             return j;
         }
-       
+       //buscar valores repetidos para no permitir que se igrese otra vez ese mismo valor
         private Boolean buscaValorrepetido(int valor)
         {
             for(int i = 0; i < filas; i++)
@@ -2094,7 +2096,7 @@ namespace Diccionario_de_datos
             }
             return true;
         }
-
+        //busca primera direccion de un arbol
         private void buscaPrimeraDir()
         {
 
@@ -2118,6 +2120,7 @@ namespace Diccionario_de_datos
             }
 
         }
+        //busca primera direccion de un arbol en un indice 
         private void buscaPrimeraDirIndice(int intermedio)
         {
             List<int> v = new List<int>();
@@ -2154,6 +2157,7 @@ namespace Diccionario_de_datos
             }
 
         }
+        //busca valor de la homa valor mayr
         private void buscaValorHojaM()
         {
             int indice = buscaRaiz();
@@ -2196,6 +2200,7 @@ namespace Diccionario_de_datos
 
 
         }
+        //busca el valor de una hoja especifica
         private int buscaHoja(long direccion)
         {
             int i = 0;
@@ -2209,6 +2214,7 @@ namespace Diccionario_de_datos
             }
             return i;
         }
+        //busca el valor de una raiz
         private int buscaRaiz()
         {
             int i = 0;
@@ -2219,6 +2225,7 @@ namespace Diccionario_de_datos
             return i;
 
         }
+        //busca el valor intermedio de una hoja en especifico
         private int buscaIntermedio(long direccion)
         {
             int i = 0;
@@ -2232,6 +2239,7 @@ namespace Diccionario_de_datos
             }
             return i;
         }
+        //busca valor itnermedio de un arbol
         private int buscaIntermedio()
         {
             int i = 0;
@@ -2241,6 +2249,7 @@ namespace Diccionario_de_datos
             }
             return i;
         }
+        //si no hay datos hay que realizar este algoritmo para ir almacenando los registros en el archivo en una dir especifica
         private void sin_datos()
         {
 
@@ -2353,6 +2362,7 @@ namespace Diccionario_de_datos
             tamaño_dato = 0;
 
         }
+        //si hay datos hay que realizar la lectura del archivo en la direccion especifica para ir almacenando los nuevos registros
         private void con_datos(long primera_dir)
         {
             Entidad aux = new Entidad();
@@ -2411,6 +2421,7 @@ namespace Diccionario_de_datos
             }
 
         }
+        //lectura de la hash
         private void leer_hash()
         {
             //primero hay que leer el cajon
@@ -2460,7 +2471,7 @@ namespace Diccionario_de_datos
 
 
         }
-
+        //lectura de la cubeta
         private void leerCubeta(long dir,int pos)
         {
             long direccion_inicial = dir;
@@ -2489,8 +2500,7 @@ namespace Diccionario_de_datos
             hash.GS_CAJON[pos].GS_cubeta.RemoveAt(c);
 
         }
-
-        
+        //Veriticar si el valor existe
         private Boolean existeValor(String valor, int posCol)
         {
           
@@ -2502,12 +2512,7 @@ namespace Diccionario_de_datos
 
 
         }
-
-
-
-
-
-
+        
 
     }
 }

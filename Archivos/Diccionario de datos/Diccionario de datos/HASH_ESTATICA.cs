@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+░▐█▀▀▒▐█▀█▒▄█▀▀█░▐██▒██░░░▒▐█▀▀█▌▒██▄░▒█▌
+░▐█▀▀▒▐█▄█▒▀▀█▄▄─░█▌▒██░░░▒▐█▄▒█▌▒▐█▒█▒█░
+░▐█▄▄▒▐█░░▒█▄▄█▀░▐██▒██▄▄█▒▐██▄█▌▒██░▒██▌
+Autor: Aarón Miranda Victorino
+Proyecto : Diccionario de datos
+Materia: Estructura de archivos
+Correo: epsilon11101@gmail.com
+Clase: HASH_ESTATICA
+*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,13 +21,17 @@ namespace Diccionario_de_datos
     // las cubetas almacenan el valor y la direccion
     class HASH_ESTATICA
     {
+        
+          
+         
         private List<Cajon> cajon;
 
+        //constructor
         public HASH_ESTATICA()
         {
             cajon = new List<Cajon>();
         }
-
+       //crear un cajon y asignar memoria
         public void Creacajon(Archivo arch)
         {
             for(int i = 0; i < 3; i++)
@@ -30,18 +44,18 @@ namespace Diccionario_de_datos
             cajon[0].GS_dirCubeta = cajon[0].GS_cubeta[0].GS_dirInicial;
             cajon[0].modificaCajon(arch);
         }
-
+        //retorna direccion inicial de primer cajon
         public long direccionInicial()
         {
             return cajon[0].GS_dirInicial;
         }
-
+        //metodo de acceso de cajones
         public List<Cajon> GS_CAJON
         {
             get { return cajon; }
             set { cajon = value; }
         }
-        
+        //asigna valor a las nuevas cubetas
         public void agregaValorenNuevaCubeta(Archivo arch, int caso, int valor, long dirValor)
         {
             int indice = 0;
@@ -103,6 +117,7 @@ namespace Diccionario_de_datos
             modifica(caso, arch);
         }
         
+        //funcion para agregar valores enteros 
         public void agregaValorEntero(int valor,long dirValor,Archivo arch)
         {
             int modulo = valor % 3;
@@ -185,7 +200,7 @@ namespace Diccionario_de_datos
 
             modifica(modulo,arch);
         }
-        
+        //reiniciar valores de cajones y cubetas
         public void reiniciaValores()
         {
             foreach(Cajon c in GS_CAJON)
@@ -198,7 +213,7 @@ namespace Diccionario_de_datos
             }
             
         }
-
+        //agrega valores a cubeta y cajones
 
         public void AgregaValores(DataGridView tabla, int filas,int posCelda,Archivo arch) {
 
@@ -227,7 +242,7 @@ namespace Diccionario_de_datos
            
 
         }
-
+        //reinicia valores especificos
 
         public void reiniciaValores(int contador,int modulo, int valor , long dirValor,Archivo arch)
         {
@@ -245,7 +260,7 @@ namespace Diccionario_de_datos
             modifica(modulo, arch);
 
         }
-
+        //modificar cajon
 
         private void modifica(int modulo,Archivo arch)
         {

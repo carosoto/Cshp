@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+░▐█▀▀▒▐█▀█▒▄█▀▀█░▐██▒██░░░▒▐█▀▀█▌▒██▄░▒█▌
+░▐█▀▀▒▐█▄█▒▀▀█▄▄─░█▌▒██░░░▒▐█▄▒█▌▒▐█▒█▒█░
+░▐█▄▄▒▐█░░▒█▄▄█▀░▐██▒██▄▄█▒▐██▄█▌▒██░▒██▌
+Autor: Aarón Miranda Victorino
+Proyecto : Diccionario de datos
+Materia: Estructura de archivos
+Correo: epsilon11101@gmail.com
+Clase: cubeta
+*/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +23,7 @@ namespace Diccionario_de_datos
     // agrega metodo para asignar memoria
     class cubeta
     {
+        //variables de instancia
         private long dir_inicial;
         private long dir_final;
         private long dir_valor;
@@ -19,7 +31,7 @@ namespace Diccionario_de_datos
         private int valor_entero;
         private string valor_cadena;
        
-
+        //constructor
         public cubeta()
         {
             dir_sig_cubeta = -1;
@@ -30,42 +42,37 @@ namespace Diccionario_de_datos
             valor_cadena = "null";
            
         }
-
-       
-
+        //obtener y modificar la direccion siguiente de la cubeta
         public long GS_dirSigCubeta
         {
             get { return dir_sig_cubeta; }
             set { dir_sig_cubeta = value; }
         }
-
+        //obtener y modificar la direccion inicial de la cubeta
         public long GS_dirInicial{
             get { return dir_inicial; }
             set { dir_inicial = value; }
             }
+        //obtener y modificar la direccion final de la cubeta
         public long GS_dirFinal
         {
             get { return dir_final; }
             set { dir_final = value; }
         }
+        //obtener y modificar la direccion del valor
         public long GS_dirvalor
         {
             get { return dir_valor; }
             set { dir_valor = value; }
         }
-
+        //obtener y modificar el valor 
         public int GS_valor
         {
             get { return valor_entero; }
             set { valor_entero = value; }
         }
-
-        public String GS_cadena
-        {
-            get { return valor_cadena; }
-            set { valor_cadena = value; }
-        }
-
+        
+        //asignar  memoria 
         public void  asignaMemoriaEnteros(Archivo arch,int posCubeta)
         {
             long dir_inicial = 0;
@@ -89,7 +96,7 @@ namespace Diccionario_de_datos
             stream.Dispose();
             
         }
-        
+        //modificar valores
         public void modificaValores(Archivo arch)
         {
             long dir_inicial = 0;
@@ -108,7 +115,6 @@ namespace Diccionario_de_datos
             stream.Dispose();
         }
         
-        public void asignaMemoriaCadena(Archivo arch) { }
 
     }
 }
